@@ -1,0 +1,81 @@
+[
+  {
+    "ContainingType": "Examen.Web.Controllers.MachineController",
+    "Method": "GetMachines",
+    "RelativePath": "api/Machine",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Examen.Web.Controllers.MachineController",
+    "Method": "AddMachine",
+    "RelativePath": "api/Machine",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "machine",
+        "Type": "Examen.ApplicationCore.Domain.Machine",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Examen.Web.Controllers.MachineController",
+    "Method": "GetMachine",
+    "RelativePath": "api/Machine/{code}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Examen.Web.Controllers.MachineController",
+    "Method": "UpdateMachine",
+    "RelativePath": "api/Machine/{code}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "machine",
+        "Type": "Examen.ApplicationCore.Domain.Machine",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Examen.Web.Controllers.MachineController",
+    "Method": "DeleteMachine",
+    "RelativePath": "api/Machine/{code}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

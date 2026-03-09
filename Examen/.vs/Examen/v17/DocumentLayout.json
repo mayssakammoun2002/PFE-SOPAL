@@ -1,0 +1,532 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\pc\\Desktop\\Examen\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B050C66E-E4D5-429C-914B-2029A275D124}|Examen.Infrastructure\\Examen.Infrastructure.csproj|c:\\users\\pc\\desktop\\examen\\examen.infrastructure\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B050C66E-E4D5-429C-914B-2029A275D124}|Examen.Infrastructure\\Examen.Infrastructure.csproj|solutionrelative:examen.infrastructure\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6CA5F66D-788A-4E5D-BF17-917FCF0B9B80}|Examen.UI.Web\\Examen.UI.Web.csproj|c:\\users\\pc\\desktop\\examen\\examen.ui.web\\controllers\\machinecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6CA5F66D-788A-4E5D-BF17-917FCF0B9B80}|Examen.UI.Web\\Examen.UI.Web.csproj|solutionrelative:examen.ui.web\\controllers\\machinecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\interfaces\\iservicemachine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\interfaces\\iservicemachine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\services\\servicemachine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\services\\servicemachine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\services\\serviceproduit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\services\\serviceproduit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\repository\\imachinerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\repository\\imachinerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6CA5F66D-788A-4E5D-BF17-917FCF0B9B80}|Examen.UI.Web\\Examen.UI.Web.csproj|c:\\users\\pc\\desktop\\examen\\examen.ui.web\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6CA5F66D-788A-4E5D-BF17-917FCF0B9B80}|Examen.UI.Web\\Examen.UI.Web.csproj|solutionrelative:examen.ui.web\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\domain\\machine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\domain\\machine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\interfaces\\iserviceuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\interfaces\\iserviceuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\interfaces\\iservicetypedefaut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\interfaces\\iservicetypedefaut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\interfaces\\iservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\interfaces\\iservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\domain\\produit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\domain\\produit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\repository\\iproduitrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\repository\\iproduitrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\repository\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\repository\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\examen.applicationcore.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\examen.applicationcore.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\interfaces\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\interfaces\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\repository\\itypedefautrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\repository\\itypedefautrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\interfaces\\iserviceproduit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\interfaces\\iserviceproduit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\interfaces\\iserviceresultatcontrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\interfaces\\iserviceresultatcontrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\interfaces\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\interfaces\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\services\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\services\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\services\\serviceresultatcontrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\services\\serviceresultatcontrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\services\\servicetypedefaut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\services\\servicetypedefaut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B050C66E-E4D5-429C-914B-2029A275D124}|Examen.Infrastructure\\Examen.Infrastructure.csproj|c:\\users\\pc\\desktop\\examen\\examen.infrastructure\\examen.infrastructure.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{B050C66E-E4D5-429C-914B-2029A275D124}|Examen.Infrastructure\\Examen.Infrastructure.csproj|solutionrelative:examen.infrastructure\\examen.infrastructure.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\domain\\resultatcontrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\domain\\resultatcontrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\domain\\role.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\domain\\role.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\domain\\typedefaut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\domain\\typedefaut.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|c:\\users\\pc\\desktop\\examen\\examen.applicationcore\\domain\\utilisateur.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDDAD9D8-F5A9-4EF2-9FC9-568E2D709CEF}|Examen.ApplicationCore\\Examen.ApplicationCore.csproj|solutionrelative:examen.applicationcore\\domain\\utilisateur.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6CA5F66D-788A-4E5D-BF17-917FCF0B9B80}|Examen.UI.Web\\Examen.UI.Web.csproj|c:\\users\\pc\\desktop\\examen\\examen.ui.web\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{6CA5F66D-788A-4E5D-BF17-917FCF0B9B80}|Examen.UI.Web\\Examen.UI.Web.csproj|solutionrelative:examen.ui.web\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6CA5F66D-788A-4E5D-BF17-917FCF0B9B80}|Examen.UI.Web\\Examen.UI.Web.csproj|c:\\users\\pc\\desktop\\examen\\examen.ui.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{6CA5F66D-788A-4E5D-BF17-917FCF0B9B80}|Examen.UI.Web\\Examen.UI.Web.csproj|solutionrelative:examen.ui.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6CA5F66D-788A-4E5D-BF17-917FCF0B9B80}|Examen.UI.Web\\Examen.UI.Web.csproj|c:\\users\\pc\\desktop\\examen\\examen.ui.web\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{6CA5F66D-788A-4E5D-BF17-917FCF0B9B80}|Examen.UI.Web\\Examen.UI.Web.csproj|solutionrelative:examen.ui.web\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UnitOfWork.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.Infrastructure\\UnitOfWork.cs",
+              "RelativeDocumentMoniker": "Examen.Infrastructure\\UnitOfWork.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.Infrastructure\\UnitOfWork.cs",
+              "RelativeToolTip": "Examen.Infrastructure\\UnitOfWork.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAIwDEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T11:19:59.614Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IServiceMachine.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Interfaces\\IServiceMachine.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Interfaces\\IServiceMachine.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Interfaces\\IServiceMachine.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Interfaces\\IServiceMachine.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-04T08:35:08.945Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ServiceMachine.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Services\\ServiceMachine.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Services\\ServiceMachine.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Services\\ServiceMachine.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Services\\ServiceMachine.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-04T09:01:11.579Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IMachineRepository.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Repository\\IMachineRepository.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Repository\\IMachineRepository.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Repository\\IMachineRepository.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Repository\\IMachineRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-04T10:18:17.57Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ServiceProduit.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Services\\ServiceProduit.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Services\\ServiceProduit.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Services\\ServiceProduit.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Services\\ServiceProduit.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-04T09:01:42.316Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MachineController.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.UI.Web\\Controllers\\MachineController.cs",
+              "RelativeDocumentMoniker": "Examen.UI.Web\\Controllers\\MachineController.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.UI.Web\\Controllers\\MachineController.cs",
+              "RelativeToolTip": "Examen.UI.Web\\Controllers\\MachineController.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAAAiwEQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T11:12:10.284Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.UI.Web\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Examen.UI.Web\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.UI.Web\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Examen.UI.Web\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-03T11:57:02.742Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Produit.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Domain\\Produit.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Domain\\Produit.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Domain\\Produit.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Domain\\Produit.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAwwCQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-03T12:18:08.009Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ITypeDefautRepository.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Repository\\ITypeDefautRepository.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Repository\\ITypeDefautRepository.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Repository\\ITypeDefautRepository.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Repository\\ITypeDefautRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-04T10:19:57.198Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Machine.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Domain\\Machine.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Domain\\Machine.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Domain\\Machine.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Domain\\Machine.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-03T12:17:23.582Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "IService.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Interfaces\\IService.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Interfaces\\IService.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Interfaces\\IService.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Interfaces\\IService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-03T11:56:52.85Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "IServiceTypeDefaut.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Interfaces\\IServiceTypeDefaut.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Interfaces\\IServiceTypeDefaut.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Interfaces\\IServiceTypeDefaut.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Interfaces\\IServiceTypeDefaut.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-04T08:51:02.86Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "IServiceuser.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Interfaces\\IServiceuser.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Interfaces\\IServiceuser.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Interfaces\\IServiceuser.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Interfaces\\IServiceuser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-04T08:34:45.051Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "IUserRepository.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Interfaces\\IUserRepository.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Interfaces\\IUserRepository.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Interfaces\\IUserRepository.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Interfaces\\IUserRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-04T10:20:33.218Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "IProduitRepository.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Repository\\IProduitRepository.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Repository\\IProduitRepository.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Repository\\IProduitRepository.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Repository\\IProduitRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-04T10:19:33.513Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "IGenericRepository.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Repository\\IGenericRepository.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Repository\\IGenericRepository.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Repository\\IGenericRepository.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Repository\\IGenericRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-03T11:56:51.624Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Examen.ApplicationCore.csproj",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Examen.ApplicationCore.csproj",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Examen.ApplicationCore.csproj",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Examen.ApplicationCore.csproj",
+              "RelativeToolTip": "Examen.ApplicationCore\\Examen.ApplicationCore.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-03-04T10:21:16.223Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "IServiceProduit.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Interfaces\\IServiceProduit.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Interfaces\\IServiceProduit.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Interfaces\\IServiceProduit.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Interfaces\\IServiceProduit.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-04T08:38:26.681Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "IServiceResultatControle.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Interfaces\\IServiceResultatControle.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Interfaces\\IServiceResultatControle.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Interfaces\\IServiceResultatControle.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Interfaces\\IServiceResultatControle.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAkAAABKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-04T08:35:44.423Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "IUnitOfWork.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Interfaces\\IUnitOfWork.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Interfaces\\IUnitOfWork.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Interfaces\\IUnitOfWork.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Interfaces\\IUnitOfWork.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-03T11:56:54.563Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Service.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Services\\Service.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Services\\Service.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Services\\Service.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Services\\Service.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-03T11:56:57.694Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Examen.Infrastructure.csproj",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.Infrastructure\\Examen.Infrastructure.csproj",
+              "RelativeDocumentMoniker": "Examen.Infrastructure\\Examen.Infrastructure.csproj",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.Infrastructure\\Examen.Infrastructure.csproj",
+              "RelativeToolTip": "Examen.Infrastructure\\Examen.Infrastructure.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-03-04T10:05:31.656Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "ServiceResultatControle.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Services\\ServiceResultatControle.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Services\\ServiceResultatControle.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Services\\ServiceResultatControle.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Services\\ServiceResultatControle.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-04T09:07:23.725Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "ServiceTypeDefaut.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Services\\ServiceTypeDefaut.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Services\\ServiceTypeDefaut.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Services\\ServiceTypeDefaut.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Services\\ServiceTypeDefaut.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-04T09:06:32.901Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "Role.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Domain\\Role.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Domain\\Role.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Domain\\Role.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Domain\\Role.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-04T07:45:04.05Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "TypeDefaut.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Domain\\TypeDefaut.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Domain\\TypeDefaut.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Domain\\TypeDefaut.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Domain\\TypeDefaut.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAowCEAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-03T12:18:35.223Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "ResultatControle.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Domain\\ResultatControle.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Domain\\ResultatControle.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Domain\\ResultatControle.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Domain\\ResultatControle.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAA9wCUAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-03T12:17:44.521Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "utilisateur.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Domain\\utilisateur.cs",
+              "RelativeDocumentMoniker": "Examen.ApplicationCore\\Domain\\utilisateur.cs",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.ApplicationCore\\Domain\\utilisateur.cs",
+              "RelativeToolTip": "Examen.ApplicationCore\\Domain\\utilisateur.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAQwBsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-03T12:17:06.984Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "_ViewStart.cshtml",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.UI.Web\\Views\\_ViewStart.cshtml",
+              "RelativeDocumentMoniker": "Examen.UI.Web\\Views\\_ViewStart.cshtml",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.UI.Web\\Views\\_ViewStart.cshtml",
+              "RelativeToolTip": "Examen.UI.Web\\Views\\_ViewStart.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-03T11:57:13.241Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.UI.Web\\appsettings.json",
+              "RelativeDocumentMoniker": "Examen.UI.Web\\appsettings.json",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.UI.Web\\appsettings.json",
+              "RelativeToolTip": "Examen.UI.Web\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-03-03T11:57:11.971Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "_ViewImports.cshtml",
+              "DocumentMoniker": "C:\\Users\\pc\\Desktop\\Examen\\Examen.UI.Web\\Views\\_ViewImports.cshtml",
+              "RelativeDocumentMoniker": "Examen.UI.Web\\Views\\_ViewImports.cshtml",
+              "ToolTip": "C:\\Users\\pc\\Desktop\\Examen\\Examen.UI.Web\\Views\\_ViewImports.cshtml",
+              "RelativeToolTip": "Examen.UI.Web\\Views\\_ViewImports.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-03T11:57:10.293Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
