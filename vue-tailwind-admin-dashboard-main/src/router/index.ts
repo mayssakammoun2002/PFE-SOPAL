@@ -33,7 +33,7 @@ const router = createRouter({
     {
       path: '/form-elements',
       name: 'Form Elements',
-      component: () => import('../views/Forms/FormElements.vue'),
+      component: () => import('@/views/Forms_machine/FormElements.vue'),
       meta: {
         title: 'Form Elements',
       },
@@ -143,7 +143,7 @@ const router = createRouter({
     {
       path: '/form_crudmachine',
       name: 'Form Machine',
-      component: () => import('../views/Forms/form_machine.vue'),
+      component: () => import('@/views/Forms_machine/form_machine.vue'),
       meta: {
         title: 'Gestion Machine',
       },
@@ -170,6 +170,14 @@ const router = createRouter({
       component: () => import('../views/produit/AddProduit.vue'),
       meta: {
         title: 'gestion des produits',
+      },
+    },
+    {
+      path: '/form_resultat_de_controle',
+      name: 'Form résultat de controle ',
+      component: () => import('../views/resultat_controle/controle.vue'),
+      meta: {
+        title: 'Gestion résultat de controle',
       },
     },
   ],

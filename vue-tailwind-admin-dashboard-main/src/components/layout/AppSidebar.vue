@@ -311,6 +311,18 @@ const menuGroups = [
           { name: "Signup", path: "/signup", pro: false },
         ],
       },
+      {
+        icon: PlugInIcon,
+        name: "Gestion Admin",
+        subItems: [
+          { name: "Gestion Machine", path: "/form_crudmachine", pro: false },
+          { name: "Gestion Produit", path: "/form_litedesproduits", pro: false },
+          { name: "Gestion Type de Défaut", path: "/form_listetypedefaut", pro: false },
+          { name: "Gestion Résultat de controle", path: "form_resultat_de_controle", pro: false },
+
+
+        ],
+      },
       // ... Add other menu items here
     ],
   },
