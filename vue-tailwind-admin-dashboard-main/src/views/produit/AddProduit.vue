@@ -153,7 +153,7 @@
               :disabled="loading"
             >
               <span v-if="loading">Enregistrement...</span>
-              <span v-else>Ajouter le produit</span>
+              <span v-else> Ajouter le produit</span>
             </button>
           </div>
         </form>
@@ -252,6 +252,8 @@ const showDropdown = ref(false)
 const produits = ref([])
 const defauts = ref([])
 
+const isEdit = ref(false) // ✅ pour savoir si on est en mode édition
+
 const form = ref({
   codeArticle: '',
   nomProduit: '',
@@ -262,13 +264,13 @@ const form = ref({
 })
 
 const api = axios.create({
-  baseURL: '/api',   // FIX
+  baseURL: '/api',
   timeout: 10000
 })
 
 const fetchDefauts = async () => {
   try {
-    const res = await api.get('/TypeDefaut') // FIX
+    const res = await api.get('/TypeDefaut')
     defauts.value = res.data
   } catch (err) {
     console.error(err)
@@ -278,7 +280,7 @@ const fetchDefauts = async () => {
 const fetchProduits = async () => {
   loading.value = true
   try {
-    const res = await api.get('/Produit') // FIX
+    const res = await api.get('/Produit')
     produits.value = res.data
   } catch (err) {
     errorMessage.value = 'Erreur chargement produits'
@@ -297,8 +299,20 @@ const resetForm = () => {
     typeDefautIds: []
   }
 
+  isEdit.value = false
   errorMessage.value = ''
   successMessage.value = ''
+}
+
+// ✅ fonction pour remplir le formulaire pour édition
+const openEditModal = (p) => {
+  isEdit.value = true
+  form.value.codeArticle = p.codeArticle
+  form.value.nomProduit = p.nomProduit
+  form.value.designation = p.designation
+  form.value.tailleEchantillonnage = p.tailleEchantillonnage
+  form.value.numOF = p.numOF
+  form.value.typeDefautIds = p.typeDefauts ? p.typeDefauts.map(d => d.id) : []
 }
 
 const handleSubmit = async () => {
@@ -314,21 +328,35 @@ const handleSubmit = async () => {
   loading.value = true
 
   try {
-    await api.post('/Produit', {  // FIX
-      codeArticle: form.value.codeArticle.trim(),
-      nomProduit: form.value.nomProduit.trim(),
-      designation: form.value.designation.trim(),
-      tailleEchantillonnage: form.value.tailleEchantillonnage || 0,
-      numOF: form.value.numOF.trim(),
-      typeDefautIds: form.value.typeDefautIds
-    })
+    if (isEdit.value) {
+      // ✅ EDIT
+      await api.put(`/Produit/${form.value.codeArticle}`, {
+        codeArticle: form.value.codeArticle.trim(),
+        nomProduit: form.value.nomProduit.trim(),
+        designation: form.value.designation.trim(),
+        tailleEchantillonnage: form.value.tailleEchantillonnage || 0,
+        numOF: form.value.numOF.trim(),
+        typeDefautIds: form.value.typeDefautIds
+      })
+      successMessage.value = 'Produit modifié avec succès !'
+    } else {
+      // ✅ AJOUT
+      await api.post('/Produit', {
+        codeArticle: form.value.codeArticle.trim(),
+        nomProduit: form.value.nomProduit.trim(),
+        designation: form.value.designation.trim(),
+        tailleEchantillonnage: form.value.tailleEchantillonnage || 0,
+        numOF: form.value.numOF.trim(),
+        typeDefautIds: form.value.typeDefautIds
+      })
+      successMessage.value = 'Produit ajouté avec succès !'
+    }
 
-    successMessage.value = 'Produit ajouté avec succès !'
     resetForm()
     await fetchProduits()
-
   } catch (err) {
-    errorMessage.value = 'Erreur lors de l\'ajout du produit'
+    errorMessage.value = 'Erreur lors de l\'opération'
+    console.error(err)
   } finally {
     loading.value = false
   }
@@ -339,7 +367,7 @@ const confirmDelete = async (codeArticle) => {
 
   loading.value = true
   try {
-    await api.delete(`/Produit/${codeArticle}`) // FIX
+    await api.delete(`/Produit/${codeArticle}`)
     successMessage.value = 'Produit supprimé'
     await fetchProduits()
   } catch (err) {
@@ -347,10 +375,6 @@ const confirmDelete = async (codeArticle) => {
   } finally {
     loading.value = false
   }
-}
-
-const openEditModal = (p) => {
-  console.log('edit', p)
 }
 
 onMounted(() => {
