@@ -21,7 +21,7 @@
       </slot>
     </button>
 
-    <!-- Dropdown Menu -->
+    <!-- Dropdown <Menu -->
     <div v-if="open" :class="menuClass">
       <slot name="menu">
         <!-- Default menu items -->

@@ -8,8 +8,8 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Ecommerce',
-      component: () => import('../views/Ecommerce.vue'),
+      name: 'signin',
+      component: () => import('../views/Auth/Signin.vue'),
       meta: {
         title: 'eCommerce Dashboard',
       },

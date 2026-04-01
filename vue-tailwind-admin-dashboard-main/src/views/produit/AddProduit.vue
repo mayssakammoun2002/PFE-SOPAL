@@ -69,22 +69,6 @@
             <p class="mt-1 text-sm text-gray-500"> </p>
           </div>
 
-          <!-- Num OF -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-              Numéro OF <span class="text-red-500">*</span>
-            </label>
-            <input
-              v-model.trim="form.numOF"
-              type="text"
-              required
-              maxlength="10"
-
-              placeholder="Ex: OF20251234"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
-            />
-            <p class="mt-1 text-sm text-gray-500">Format : OF suivi de 8 chiffres</p>
-          </div>
 
           <!-- Liste déroulante -->
           <div class="relative">
@@ -173,7 +157,6 @@
             <tr>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Code</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nom</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">OF</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">La cadence</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
             </tr>
@@ -186,9 +169,7 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {{ p.nomProduit }}
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ p.numOF }}
-              </td>
+
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {{ p.tailleEchantillonnage || '-' }}
               </td>
@@ -252,14 +233,13 @@ const showDropdown = ref(false)
 const produits = ref([])
 const defauts = ref([])
 
-const isEdit = ref(false) // ✅ pour savoir si on est en mode édition
+const isEdit = ref(false)
 
 const form = ref({
   codeArticle: '',
   nomProduit: '',
   designation: '',
   tailleEchantillonnage: null,
-  numOF: '',
   typeDefautIds: []
 })
 
@@ -267,6 +247,10 @@ const api = axios.create({
   baseURL: '/api',
   timeout: 10000
 })
+
+// ======================
+// FETCH DATA
+// ======================
 
 const fetchDefauts = async () => {
   try {
@@ -289,13 +273,16 @@ const fetchProduits = async () => {
   }
 }
 
+// ======================
+// RESET FORM
+// ======================
+
 const resetForm = () => {
   form.value = {
     codeArticle: '',
     nomProduit: '',
     designation: '',
     tailleEchantillonnage: null,
-    numOF: '',
     typeDefautIds: []
   }
 
@@ -304,49 +291,58 @@ const resetForm = () => {
   successMessage.value = ''
 }
 
-// ✅ fonction pour remplir le formulaire pour édition
+// ======================
+// EDIT
+// ======================
+
 const openEditModal = (p) => {
   isEdit.value = true
   form.value.codeArticle = p.codeArticle
   form.value.nomProduit = p.nomProduit
   form.value.designation = p.designation
   form.value.tailleEchantillonnage = p.tailleEchantillonnage
-  form.value.numOF = p.numOF
-  form.value.typeDefautIds = p.typeDefauts ? p.typeDefauts.map(d => d.id) : []
+
+  // ✅ convertir en number
+  form.value.typeDefautIds = p.typeDefauts
+    ? p.typeDefauts.map(d => Number(d.id))
+    : []
 }
+
+// ======================
+// SUBMIT (FIXED)
+// ======================
 
 const handleSubmit = async () => {
   errorMessage.value = ''
   successMessage.value = ''
 
-  const ofRegex = /^OF\d{8}$/
-  if (!ofRegex.test(form.value.numOF)) {
-    errorMessage.value = "Le numéro OF doit être au format OF suivi de 8 chiffres"
+  // ✅ validation taille
+  if (form.value.tailleEchantillonnage > 100) {
+    errorMessage.value = "La taille doit être ≤ 100"
     return
   }
+
+  // ✅ conversion ids (TRÈS IMPORTANT)
+  form.value.typeDefautIds = form.value.typeDefautIds.map(id => Number(id))
 
   loading.value = true
 
   try {
     if (isEdit.value) {
-      // ✅ EDIT
       await api.put(`/Produit/${form.value.codeArticle}`, {
         codeArticle: form.value.codeArticle.trim(),
         nomProduit: form.value.nomProduit.trim(),
         designation: form.value.designation.trim(),
         tailleEchantillonnage: form.value.tailleEchantillonnage || 0,
-        numOF: form.value.numOF.trim(),
         typeDefautIds: form.value.typeDefautIds
       })
       successMessage.value = 'Produit modifié avec succès !'
     } else {
-      // ✅ AJOUT
       await api.post('/Produit', {
         codeArticle: form.value.codeArticle.trim(),
         nomProduit: form.value.nomProduit.trim(),
         designation: form.value.designation.trim(),
         tailleEchantillonnage: form.value.tailleEchantillonnage || 0,
-        numOF: form.value.numOF.trim(),
         typeDefautIds: form.value.typeDefautIds
       })
       successMessage.value = 'Produit ajouté avec succès !'
@@ -354,13 +350,22 @@ const handleSubmit = async () => {
 
     resetForm()
     await fetchProduits()
+
   } catch (err) {
-    errorMessage.value = 'Erreur lors de l\'opération'
-    console.error(err)
+    console.log("ERREUR BACK:", err.response?.data)
+
+    errorMessage.value =
+      err.response?.data?.inner ||
+      err.response?.data?.message ||
+      "Erreur serveur"
   } finally {
     loading.value = false
   }
 }
+
+// ======================
+// DELETE
+// ======================
 
 const confirmDelete = async (codeArticle) => {
   if (!confirm(`Supprimer le produit ${codeArticle} ?`)) return
@@ -371,11 +376,16 @@ const confirmDelete = async (codeArticle) => {
     successMessage.value = 'Produit supprimé'
     await fetchProduits()
   } catch (err) {
-    errorMessage.value = 'Erreur suppression'
-  } finally {
-    loading.value = false
+    console.error("Erreur complète :", err.response?.data);
+
+    errorMessage.value =
+      err.response?.data?.detail ||
+      err.response?.data?.message ||
+      "Erreur serveur inconnue";
   }
 }
+
+// ======================
 
 onMounted(() => {
   fetchProduits()

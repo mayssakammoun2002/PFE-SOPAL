@@ -29,6 +29,7 @@
               Back to dashboard
             </router-link>
           </div>
+
           <!-- Form -->
           <div class="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
             <div class="mb-5 sm:mb-8">
@@ -41,6 +42,12 @@
                 Enter your email and password to sign up!
               </p>
             </div>
+
+            <!-- Message d'erreur -->
+            <div v-if="errorMessage" class="mb-6 p-4 text-sm text-red-600 bg-red-50 rounded-lg dark:bg-red-900/20 dark:text-red-400">
+              {{ errorMessage }}
+            </div>
+
             <div>
               <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
                 <button
@@ -87,20 +94,21 @@
                       d="M15.6705 1.875H18.4272L12.4047 8.75833L19.4897 18.125H13.9422L9.59717 12.4442L4.62554 18.125H1.86721L8.30887 10.7625L1.51221 1.875H7.20054L11.128 7.0675L15.6705 1.875ZM14.703 16.475H16.2305L6.37054 3.43833H4.73137L14.703 16.475Z"
                     />
                   </svg>
-
                   Sign up with X
                 </button>
               </div>
+
               <div class="relative py-3 sm:py-5">
                 <div class="absolute inset-0 flex items-center">
                   <div class="w-full border-t border-gray-200 dark:border-gray-800"></div>
                 </div>
                 <div class="relative flex justify-center text-sm">
                   <span class="p-2 text-gray-400 bg-white dark:bg-gray-900 sm:px-5 sm:py-2"
-                    >Or</span
+                  >Or</span
                   >
                 </div>
               </div>
+
               <form @submit.prevent="handleSubmit">
                 <div class="space-y-5">
                   <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -139,6 +147,7 @@
                       />
                     </div>
                   </div>
+
                   <!-- Email -->
                   <div>
                     <label
@@ -156,6 +165,7 @@
                       class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                     />
                   </div>
+
                   <!-- Password -->
                   <div>
                     <label
@@ -211,7 +221,8 @@
                       </span>
                     </div>
                   </div>
-                  <!-- Checkbox -->
+
+                  <!-- Checkbox Terms -->
                   <div>
                     <div>
                       <label
@@ -263,17 +274,21 @@
                       </label>
                     </div>
                   </div>
+
                   <!-- Button -->
                   <div>
                     <button
                       type="submit"
-                      class="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
+                      :disabled="loading"
+                      class="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 disabled:opacity-70 disabled:cursor-not-allowed"
                     >
-                      Sign Up
+                      <span v-if="loading">Creating account...</span>
+                      <span v-else>Sign Up</span>
                     </button>
                   </div>
                 </div>
               </form>
+
               <div class="mt-5">
                 <p
                   class="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start"
@@ -282,13 +297,15 @@
                   <router-link
                     to="/signin"
                     class="text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                    >Sign In</router-link
+                  >Sign In</router-link
                   >
                 </p>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- Right Side -->
         <div
           class="relative items-center hidden w-full h-full lg:w-1/2 bg-brand-950 dark:bg-white/5 lg:grid"
         >
@@ -299,7 +316,8 @@
                 <img width="{231}" height="{48}" src="/images/logo/auth-logo.svg" alt="Logo" />
               </router-link>
               <p class="text-center text-gray-400 dark:text-white/60">
-                La Force de qualité                </p>
+                La Force de qualité
+              </p>
             </div>
           </div>
         </div>
@@ -312,8 +330,12 @@
 import FullScreenLayout from '@/components/layout/FullScreenLayout.vue'
 import CommonGridShape from '@/components/common/CommonGridShape.vue'
 import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { useRouter } from 'vue-router'
+import axios from 'axios'
 
+const router = useRouter()
+
+// Toutes tes variables existantes
 const firstName = ref('')
 const lastName = ref('')
 const email = ref('')
@@ -321,18 +343,54 @@ const password = ref('')
 const showPassword = ref(false)
 const agreeToTerms = ref(false)
 
+// Nouvelles variables pour le loading et les erreurs
+const loading = ref(false)
+const errorMessage = ref('')
+
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value
 }
 
-const handleSubmit = () => {
-  // Implement form submission logic here
-  console.log('Form submitted', {
-    firstName: firstName.value,
-    lastName: lastName.value,
-    email: email.value,
-    password: password.value,
-    agreeToTerms: agreeToTerms.value,
-  })
+const handleSubmit = async () => {
+  // Validation côté frontend
+  if (!firstName.value || !lastName.value || !email.value || !password.value) {
+    errorMessage.value = "Tous les champs obligatoires doivent être remplis."
+    return
+  }
+
+  if (!agreeToTerms.value) {
+    errorMessage.value = "Vous devez accepter les conditions d'utilisation."
+    return
+  }
+
+  loading.value = true
+  errorMessage.value = ''
+
+  try {
+    const response = await axios.post(
+      'http://localhost:5100/api/Utilisateur/signup',
+      {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        email: email.value,
+        password: password.value
+      }
+    )
+
+    alert("Compte créé avec succès ! Vous pouvez maintenant vous connecter.")
+    router.push('/signin')
+
+  } catch (error: any) {
+    if (error.response?.data) {
+      errorMessage.value = typeof error.response.data === 'string'
+        ? error.response.data
+        : "Une erreur est survenue lors de l'inscription."
+    } else {
+      errorMessage.value = "Impossible de contacter le serveur. Vérifiez votre connexion."
+    }
+    console.error(error)
+  } finally {
+    loading.value = false
+  }
 }
 </script>
