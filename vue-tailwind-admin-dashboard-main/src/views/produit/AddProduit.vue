@@ -70,49 +70,49 @@
           </div>
 
 
-          <!-- Liste déroulante -->
-          <div class="relative">
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-              Types de défauts
-            </label>
+<!--          &lt;!&ndash; Liste déroulante &ndash;&gt;-->
+<!--          <div class="relative">-->
+<!--            <label class="block text-sm font-medium text-gray-700 mb-1">-->
+<!--              Types de défauts-->
+<!--            </label>-->
 
-            <!-- Bouton -->
-            <div
-              @click="showDropdown = !showDropdown"
-              class="border border-gray-300 rounded-lg p-2 cursor-pointer bg-white"
-            >
-              Sélectionner défauts
-            </div>
+<!--            &lt;!&ndash; Bouton &ndash;&gt;-->
+<!--            <div-->
+<!--              @click="showDropdown = !showDropdown"-->
+<!--              class="border border-gray-300 rounded-lg p-2 cursor-pointer bg-white"-->
+<!--            >-->
+<!--              Sélectionner défauts-->
+<!--            </div>-->
 
-            <!-- Dropdown -->
-            <div
-              v-if="showDropdown"
-              class="absolute z-10 mt-2 w-full bg-white border border-gray-300 rounded-lg shadow max-h-60 overflow-y-auto"
-            >
-              <div
-                v-for="d in defauts"
-                :key="d.id"
-                class="flex flex-col gap-2 p-3 border-b hover:bg-gray-50"
-              >
-                <!-- Checkbox + nom -->
-                <div class="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    :value="d.id"
-                    v-model="form.typeDefautIds"
-                  />
-                  <span>{{ d.nomDefaut }}</span>
-                </div>
+<!--            &lt;!&ndash; Dropdown &ndash;&gt;-->
+<!--            <div-->
+<!--              v-if="showDropdown"-->
+<!--              class="absolute z-10 mt-2 w-full bg-white border border-gray-300 rounded-lg shadow max-h-60 overflow-y-auto"-->
+<!--            >-->
+<!--              <div-->
+<!--                v-for="d in defauts"-->
+<!--                :key="d.id"-->
+<!--                class="flex flex-col gap-2 p-3 border-b hover:bg-gray-50"-->
+<!--              >-->
+<!--                &lt;!&ndash; Checkbox + nom &ndash;&gt;-->
+<!--                <div class="flex items-center gap-2">-->
+<!--                  <input-->
+<!--                    type="checkbox"-->
+<!--                    :value="d.id"-->
+<!--                    v-model="form.typeDefautIds"-->
+<!--                  />-->
+<!--                  <span>{{ d.nomDefaut }}</span>-->
+<!--                </div>-->
 
-                <!-- Image en dessous -->
-                <img
-                  v-if="d.imagePath"
-                  :src="`http://localhost:5100/images/${d.imagePath}`"
-                  class="w-20 h-20 rounded object-cover ml-6"
-                />
-              </div>
-            </div>
-          </div>
+<!--                &lt;!&ndash; Image en dessous &ndash;&gt;-->
+<!--                <img-->
+<!--                  v-if="d.imagePath"-->
+<!--                  :src="`http://localhost:5100/images/${d.imagePath}`"-->
+<!--                  class="w-20 h-20 rounded object-cover ml-6"-->
+<!--                />-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
 
           <!-- Messages -->
           <div v-if="errorMessage" class="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
@@ -121,7 +121,7 @@
           <div v-if="successMessage" class="p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
             {{ successMessage }}
           </div>
-
+          <!-- Buttons -->
           <div class="flex justify-end gap-4 pt-4">
             <button
               type="button"
@@ -131,13 +131,27 @@
             >
               Annuler
             </button>
+
+            <!-- Bouton AJOUTER -->
             <button
+              v-if="!isEdit"
               type="submit"
               class="px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed transition flex items-center gap-2"
               :disabled="loading"
             >
               <span v-if="loading">Enregistrement...</span>
-              <span v-else> Ajouter le produit</span>
+              <span v-else>Ajouter le produit</span>
+            </button>
+
+            <!-- Bouton MODIFIER -->
+            <button
+              v-if="isEdit"
+              type="submit"
+              class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition flex items-center gap-2"
+              :disabled="loading"
+            >
+              <span v-if="loading">Enregistrement...</span>
+              <span v-else>Modifier le produit</span>
             </button>
           </div>
         </form>
@@ -316,53 +330,41 @@ const handleSubmit = async () => {
   errorMessage.value = ''
   successMessage.value = ''
 
-  // ✅ validation taille
-  if (form.value.tailleEchantillonnage > 100) {
-    errorMessage.value = "La taille doit être ≤ 100"
+  if (!form.value.codeArticle || !form.value.nomProduit) {
+    errorMessage.value = "Code article et nom du produit sont obligatoires"
     return
   }
-
-  // ✅ conversion ids (TRÈS IMPORTANT)
-  form.value.typeDefautIds = form.value.typeDefautIds.map(id => Number(id))
 
   loading.value = true
 
   try {
+    const payload = {
+      codeArticle: form.value.codeArticle.trim().toUpperCase(),
+      nomProduit: form.value.nomProduit.trim(),
+      designation: form.value.designation.trim(),
+      tailleEchantillonnage: form.value.tailleEchantillonnage || 0,
+      typeDefautIds: form.value.typeDefautIds.map(id => Number(id))
+    }
+
     if (isEdit.value) {
-      await api.put(`/Produit/${form.value.codeArticle}`, {
-        codeArticle: form.value.codeArticle.trim(),
-        nomProduit: form.value.nomProduit.trim(),
-        designation: form.value.designation.trim(),
-        tailleEchantillonnage: form.value.tailleEchantillonnage || 0,
-        typeDefautIds: form.value.typeDefautIds
-      })
+      await api.put(`/Produit/${form.value.codeArticle}`, payload)
       successMessage.value = 'Produit modifié avec succès !'
     } else {
-      await api.post('/Produit', {
-        codeArticle: form.value.codeArticle.trim(),
-        nomProduit: form.value.nomProduit.trim(),
-        designation: form.value.designation.trim(),
-        tailleEchantillonnage: form.value.tailleEchantillonnage || 0,
-        typeDefautIds: form.value.typeDefautIds
-      })
+      await api.post('/Produit', payload)
       successMessage.value = 'Produit ajouté avec succès !'
     }
 
     resetForm()
     await fetchProduits()
-
   } catch (err) {
-    console.log("ERREUR BACK:", err.response?.data)
-
-    errorMessage.value =
-      err.response?.data?.inner ||
-      err.response?.data?.message ||
-      "Erreur serveur"
+    console.error(err.response?.data)
+    errorMessage.value = err.response?.data?.message ||
+      err.response?.data?.detail ||
+      "Erreur lors de l'enregistrement"
   } finally {
     loading.value = false
   }
 }
-
 // ======================
 // DELETE
 // ======================

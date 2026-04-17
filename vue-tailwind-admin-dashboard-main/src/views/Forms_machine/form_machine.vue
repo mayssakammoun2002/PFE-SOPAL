@@ -6,10 +6,9 @@ import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import AdminLayout from '@/components/layout/AdminLayout.vue'
 import ComponentCard from '@/components/common/ComponentCard.vue'
 
-// ================= API (PROXY FIX) =================
+// ================= API =================
 const API_URL = '/api/Machine'
 
-// ================= STATES =================
 const currentPageTitle = ref("Gestion des Machines")
 
 const machine = ref({
@@ -18,7 +17,7 @@ const machine = ref({
   actif: true
 })
 
-const editingId = ref(null)
+const editingCode = ref(null)     // ← Changé : on utilise codeMachine comme clé
 const machines = ref([])
 const errorMessage = ref('')
 const successMessage = ref('')
@@ -31,8 +30,8 @@ const fetchMachines = async () => {
     const res = await axios.get(API_URL)
     machines.value = res.data
   } catch (err) {
-    console.log("ERROR:", err)
-    errorMessage.value = "Impossible de charger les machines (backend/CORS)."
+    console.error(err)
+    errorMessage.value = "Impossible de charger les machines"
   } finally {
     loading.value = false
   }
@@ -48,44 +47,51 @@ const saveMachine = async () => {
     return
   }
 
-  if (!machine.value.nomMachine.trim()) {
+  if (!machine.value.nomMachine?.trim()) {
     errorMessage.value = "Nom machine obligatoire"
     return
   }
 
   try {
-    if (editingId.value) {
-      await axios.put(`${API_URL}/${editingId.value}`, machine.value)
-      successMessage.value = "Machine modifiée"
+    if (editingCode.value) {
+      // Mise à jour
+      await axios.put(`${API_URL}/${editingCode.value}`, machine.value)
+      successMessage.value = "Machine modifiée avec succès"
     } else {
+      // Création
       await axios.post(API_URL, machine.value)
-      successMessage.value = "Machine ajoutée"
+      successMessage.value = "Machine ajoutée avec succès"
     }
 
     resetForm()
-    fetchMachines()
+    await fetchMachines()
 
   } catch (err) {
-    console.log("ERROR SAVE:", err)
-    errorMessage.value = "Erreur serveur / Network Error"
+    console.error(err)
+    errorMessage.value = err.response?.data?.message || "Erreur serveur"
   }
 }
 
 // ================= EDIT =================
 const editMachine = (m) => {
-  machine.value = { ...m }
-  editingId.value = m.id
+  machine.value = {
+    codeMachine: m.codeMachine,
+    nomMachine: m.nomMachine,
+    actif: m.actif
+  }
+  editingCode.value = m.codeMachine   // ← Important : on stocke le codeMachine
 }
 
 // ================= DELETE =================
-const deleteMachine = async (id) => {
-  if (!confirm("Supprimer cette machine ?")) return
+const deleteMachine = async (codeMachine) => {
+  if (!confirm(`Supprimer la machine ${codeMachine} ?`)) return
 
   try {
-    await axios.delete(`${API_URL}/${id}`)
-    fetchMachines()
+    await axios.delete(`${API_URL}/${codeMachine}`)
+    successMessage.value = "Machine supprimée"
+    await fetchMachines()
   } catch (err) {
-    errorMessage.value = "Erreur suppression"
+    errorMessage.value = "Erreur lors de la suppression"
   }
 }
 
@@ -96,13 +102,14 @@ const resetForm = () => {
     nomMachine: '',
     actif: true
   }
-  editingId.value = null
+  editingCode.value = null
+  errorMessage.value = ''
+  successMessage.value = ''
 }
 
 // ================= INIT =================
 onMounted(fetchMachines)
 </script>
-
 <template>
   <AdminLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
@@ -127,7 +134,8 @@ onMounted(fetchMachines)
             maxlength="8"
             placeholder="Ex: MAC00001"
             class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
-            :disabled="editingId">   <!-- on bloque souvent le code en édition -->
+            :disabled="!!editingId"
+          />
         </div>
 
         <div>
@@ -153,32 +161,36 @@ onMounted(fetchMachines)
           </select>
         </div>
 
-        <div class="flex gap-4">
-          <button
-            type="submit"
-            class="px-6 py-3 text-white bg-green-600 rounded-lg hover:bg-green-700 transition"
-
-
-
-            :disabled="loading"
-          >
-            {{ loading ? 'En cours...' : (editingId ? 'Modifier Machine' : 'Ajouter Machine') }}
-          </button>
+        <!-- ====================== BOUTONS SÉPARÉS ====================== -->
+        <!-- ====================== BOUTONS SÉPARÉS ====================== -->
+        <div class="flex justify-end gap-4 pt-4">
           <button
             type="button"
             @click="resetForm"
-            class="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+            class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
             :disabled="loading"
           >
             Annuler
           </button>
+
+          <!-- Bouton AJOUTER -->
           <button
-            v-if="editingId"
-            type="button"
-            @click="machine = { codeMachine: '', nomMachine: '', actif: true }; editingId = null"
-            class="px-6 py-3 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+            v-if="!editingCode"
+            type="submit"
+            class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+            :disabled="loading"
           >
-            Annuler
+            {{ loading ? 'En cours...' : 'Ajouter Machine' }}
+          </button>
+
+          <!-- Bouton MODIFIER -->
+          <button
+            v-if="editingCode"
+            type="submit"
+            class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            :disabled="loading"
+          >
+            {{ loading ? 'En cours...' : 'Modifier Machine' }}
           </button>
         </div>
       </form>

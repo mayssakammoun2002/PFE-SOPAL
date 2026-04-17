@@ -48,7 +48,7 @@
 
             <div class="lg:col-span-2">
               <label class="block text-sm font-medium mb-1">Quantité Produite <span class="text-red-500">*</span></label>
-              <input type="number" v-model.number="form.quantite" class="w-full border p-3 rounded-lg" placeholder="Quantité totale" required />
+              <input type="number" v-model.number="form.quantite" class="w-full border p-3 rounded-lg" min="1" required />
             </div>
 
             <div class="lg:col-span-2">
@@ -58,7 +58,7 @@
                 v-model.number="form.cadence"
                 @change="calculerEchantillons"
                 class="w-full border p-3 rounded-lg"
-                placeholder="Ex: 85"
+                min="1"
                 required
               />
             </div>
@@ -85,14 +85,13 @@
               <input disabled :value="tailleEchantillons" class="w-full border p-2 rounded-lg font-semibold text-green-700 bg-white" />
             </div>
 
-            <!-- Message produit inconnu -->
             <div v-if="isProduitInconnu" class="col-span-3 p-4 bg-amber-50 border border-amber-200 rounded-xl text-amber-700 text-sm">
               ⚠️ Le produit <span class="font-mono font-semibold">{{ form.codeArticle.toUpperCase() }}</span> n'existe pas dans la base.<br>
-              <strong>Vous pouvez saisir la désignation manuellement et continuer le contrôle avec tous les défauts.</strong>
+              <strong>Vous pouvez saisir la désignation manuellement.</strong>
             </div>
           </div>
 
-          <!-- Tests Échantillons -->
+          <!-- TESTS ÉCHANTILLONS -->
           <div v-if="!editingId && form.codeArticle && form.quantite && form.cadence"
                class="border-2 border-dashed border-green-300 p-6 rounded-2xl bg-white">
 
@@ -104,11 +103,8 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              <div v-for="(ech, index) in echantillons" :key="index"
-                   class="border rounded-2xl p-5 bg-gray-50 hover:bg-white transition">
-
+              <div v-for="(ech, index) in echantillons" :key="index" class="border rounded-2xl p-5 bg-gray-50 hover:bg-white transition">
                 <p class="text-center font-medium mb-4">Échantillon {{ index + 1 }}</p>
-
                 <div class="flex justify-center gap-4 mb-4">
                   <button type="button" @click="ech.valeur = 0"
                           :class="ech.valeur === 0 ? 'bg-green-600 text-white ring-2 ring-green-400' : 'bg-gray-200 hover:bg-gray-300'"
@@ -130,20 +126,13 @@
                     <option value="Nouveau Défaut">➕ Nouveau Défaut</option>
                   </select>
 
-                  <input v-if="ech.defaut === 'Nouveau Défaut'"
-                         v-model="ech.nouveauDefaut"
-                         placeholder="Nom du nouveau défaut"
-                         class="w-full border p-3 rounded-lg" />
-
-                  <input v-model="ech.solution"
-                         placeholder="Solution corrective"
-                         class="w-full border p-3 rounded-lg" />
+                  <input v-if="ech.defaut === 'Nouveau Défaut'" v-model="ech.nouveauDefaut" placeholder="Nom du nouveau défaut" class="w-full border p-3 rounded-lg" />
+                  <input v-model="ech.solution" placeholder="Solution corrective" class="w-full border p-3 rounded-lg" />
                 </div>
               </div>
             </div>
 
-            <button @click.prevent="validerTestEnCours"
-                    class="mt-8 w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-semibold text-lg transition">
+            <button @click.prevent="validerTestEnCours" class="mt-8 w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-semibold text-lg transition">
               Valider Test {{ currentStep }}
             </button>
           </div>
@@ -203,17 +192,46 @@
               <td class="border p-3 text-center">{{ res.nbDefautsTest1 }}</td>
               <td class="border p-3 text-center">{{ res.nbDefautsTest2 }}</td>
               <td class="border p-3 text-center">
-                <span :class="res.statutLot === 'Conforme' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
-                      class="px-4 py-1 rounded-full text-xs font-semibold">
-                  {{ res.statutLot }}
-                </span>
-              </td>
-              <td class="border p-3 text-center">
-                <div class="flex gap-4 justify-center">
-                  <button @click="editControle(res)" class="text-indigo-600 hover:text-indigo-900">✏️</button>
-                  <button @click="confirmDelete(res.id)" class="text-red-600 hover:text-red-800">🗑️</button>
-                </div>
-              </td>
+                  <span :class="res.statutLot === 'Conforme' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'" class="px-4 py-1 rounded-full text-xs font-semibold">
+                    {{ res.statutLot }}
+                  </span>
+              </td><td class="border p-3 text-center">
+              <div class="flex gap-4 justify-center">
+
+                <!-- ✏️ Modifier -->
+                <button
+                  @click="editControle(res)"
+                  title="Modifier"
+                  class="text-indigo-600 hover:text-indigo-900 transition duration-150 hover:scale-110"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                    />
+                  </svg>
+                </button>
+
+                <!-- 🗑 Supprimer -->
+                <button
+                  @click="confirmDelete(res.id)"
+                  title="Supprimer"
+                  class="text-red-600 hover:text-red-800 transition duration-150 hover:scale-110"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                </button>
+
+              </div>
+            </td>
             </tr>
             <tr v-if="resultats.length === 0">
               <td colspan="11" class="text-center p-8 text-gray-500">Aucun contrôle enregistré</td>
@@ -225,15 +243,15 @@
     </div>
   </AdminLayout>
 </template>
-
 <script setup>
-import {ref, onMounted, computed} from "vue"
-import axios from "axios"
+import { ref, onMounted, computed } from "vue"
+import api from '@/services/api'  // ✅ SEULEMENT ÇA, plus d'axios direct
 
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import AdminLayout from '@/components/layout/AdminLayout.vue'
 import ComponentCard from '@/components/common/ComponentCard.vue'
 
+// ====================== STATE ======================
 const currentPageTitle = ref("Résultat de Contrôle")
 const loading = ref(false)
 const message = ref("")
@@ -266,45 +284,41 @@ const isFinished = ref(false)
 const finalStatut = ref("")
 const solutionGlobale = ref("")
 
-const api = axios.create({baseURL: 'http://localhost:5100/api'})
-
-// ====================== DÉFAUTS ======================
+// ====================== COMPUTED ======================
 const defautsParProduit = computed(() => {
   const code = form.value.codeArticle?.trim().toUpperCase()
-  if (code && isProduitInconnu.value) {
-    return defauts.value
-  }
+  if (code && isProduitInconnu.value) return defauts.value
   return defauts.value.filter(d => d.codeArticle === code)
 })
 
-// ====================== ON CODE ARTICLE CHANGE ======================
+// ====================== PRODUIT ======================
 const onCodeArticleChange = async () => {
-  const code = form.value.codeArticle?.trim().toUpperCase()
+  const code = (form.value.codeArticle || "").trim().toUpperCase()
   form.value.codeArticle = code
-
-  if (!code) {
-    resetProduitInfo()
-    return
-  }
+  if (!code) return resetProduitInfo()
 
   try {
-    const res = await api.get(`/Produit/${code}`)
-    designation.value = res.data?.designation || ""
-    cadenceBase.value = res.data?.cadence || 0
-    isProduitInconnu.value = false
+    const response = await api.get(`/Produit/${code}`, {
+      validateStatus: (status) => status === 200 || status === 404
+    })
 
-    if (res.data?.cadence) form.value.cadence = res.data.cadence
+    if (response.status === 200) {
+      designation.value = response.data?.designation || ""
+      cadenceBase.value = response.data?.cadence || 0
+      isProduitInconnu.value = false
+      if (response.data?.cadence) form.value.cadence = response.data.cadence
+    } else {
+      designation.value = ""
+      cadenceBase.value = 0
+      isProduitInconnu.value = true
+    }
   } catch (e) {
-    console.warn(`Produit ${code} introuvable → Mode manuel activé`)
-    designation.value = ""
-    cadenceBase.value = 0
+    console.warn("Erreur produit :", e)
     isProduitInconnu.value = true
   }
-
   calculerEchantillons()
 }
 
-// ====================== RESET & CALCUL ======================
 const resetProduitInfo = () => {
   designation.value = ""
   cadenceBase.value = 0
@@ -312,6 +326,7 @@ const resetProduitInfo = () => {
   calculerEchantillons()
 }
 
+// ====================== CALCUL & TEST ======================
 const calculerEchantillons = () => {
   const cad = Number(form.value.cadence) || 0
   tailleEchantillons.value = cad > 75 ? 5 : 3
@@ -319,7 +334,7 @@ const calculerEchantillons = () => {
 }
 
 const initEchantillons = () => {
-  echantillons.value = Array.from({length: tailleEchantillons.value}, () => ({
+  echantillons.value = Array.from({ length: tailleEchantillons.value }, () => ({
     valeur: null,
     defaut: "",
     nouveauDefaut: "",
@@ -327,73 +342,138 @@ const initEchantillons = () => {
   }))
 }
 
-// ====================== VALIDATION TEST ======================
 const validerTestEnCours = () => {
   const nbDefauts = echantillons.value.filter(e => e.valeur === 1).length
-  testResults.value.push({nbDefauts, details: [...echantillons.value]})
+
+  testResults.value.push({
+    nbDefauts,
+    echantillons: echantillons.value.map(e => ({ ...e }))
+  })
 
   if (currentStep.value === 1) {
-    if (nbDefauts === 0) finalStatut.value = "Conforme"
-    else if (nbDefauts >= 2) finalStatut.value = "Non Conforme"
-    else {
+    if (nbDefauts === 0) {
+      finalStatut.value = "Conforme"
+      isFinished.value = true
+    } else if (nbDefauts >= 2) {
+      finalStatut.value = "Non Conforme"
+      isFinished.value = true
+    } else {
       currentStep.value = 2
       initEchantillons()
-      return
     }
   } else {
     finalStatut.value = nbDefauts === 0 ? "Conforme" : "Non Conforme"
+    isFinished.value = true
   }
-  isFinished.value = true
+}
+
+const extraireDefauts = () => {
+  const echTest1 = testResults.value[0]?.echantillons || []
+  const echTest2 = testResults.value[1]?.echantillons || []
+
+  const defautsTest1 = echTest1.filter(e => e.valeur === 1)
+  const defautsTest2 = echTest2.filter(e => e.valeur === 1)
+
+  const resoudreDefaut = (ech) => {
+    if (!ech) return null
+    if (ech.defaut === 'Nouveau Défaut') return ech.nouveauDefaut?.trim() || null
+    return ech.defaut?.trim() || null
+  }
+
+  return {
+    defaut1: resoudreDefaut(defautsTest1[0]),
+    defaut2: resoudreDefaut(defautsTest2[0])
+  }
 }
 
 // ====================== SUBMIT ======================
 const handleSubmit = async () => {
-  if (!form.value.utilisateurId || !form.value.codeMachine || !form.value.codeArticle ||
-    !form.value.numOF || !form.value.quantite || !form.value.cadence) {
-    errorMsg.value = "Tous les champs obligatoires doivent être remplis"
-    return
-  }
+  errorMsg.value = ""
+  message.value = ""
 
-  if (finalStatut.value === 'Non Conforme' && !solutionGlobale.value?.trim()) {
-    errorMsg.value = "Veuillez saisir une solution corrective globale"
-    return
-  }
+  if (!form.value.utilisateurId) return errorMsg.value = "❌ Sélectionnez un Contrôleur"
+  if (!form.value.codeMachine) return errorMsg.value = "❌ Sélectionnez une Machine"
+  if (!form.value.numOF?.trim()) return errorMsg.value = "❌ Num OF obligatoire"
+  if (!form.value.codeArticle?.trim()) return errorMsg.value = "❌ Code Article obligatoire"
+  if (!form.value.quantite || form.value.quantite < 1) return errorMsg.value = "❌ Quantité > 0"
+  if (!form.value.cadence || form.value.cadence < 1) return errorMsg.value = "❌ Cadence > 0"
 
   loading.value = true
-  errorMsg.value = ""
+
+  const { defaut1, defaut2 } = extraireDefauts()
 
   const payload = {
-    codeMachine: form.value.codeMachine,
-    codeArticle: form.value.codeArticle.toUpperCase(),
-    numOF: form.value.numOF,
+    codeMachine: form.value.codeMachine.trim(),
+    codeArticle: form.value.codeArticle.trim().toUpperCase(),
+    numOF: form.value.numOF.trim(),
     utilisateurId: Number(form.value.utilisateurId),
     quantite: Number(form.value.quantite),
     cadence: Number(form.value.cadence),
     nbEchantillons: tailleEchantillons.value,
-    nbDefautsTest1: testResults.value[0]?.nbDefauts || 0,
-    nbDefautsTest2: testResults.value[1]?.nbDefauts || 0,
+    nbDefautsTest1: testResults.value[0]?.nbDefauts ?? 0,
+    nbDefautsTest2: testResults.value[1]?.nbDefauts ?? 0,
     solutionGlobale: solutionGlobale.value?.trim() || null,
-    statutLot: finalStatut.value || "Conforme",
-    dateControle: new Date().toISOString()
+    defaut1,
+    defaut2
   }
 
   try {
     if (editingId.value) {
-      await api.put(`/ResultatControle/${editingId.value}`, payload)
-      message.value = "✅ Contrôle modifié avec succès"
+      const res = await api.put(`/ResultatControle/${editingId.value}`, payload)
+      if (res.data?.success === false) {
+        errorMsg.value = res.data?.message || "Erreur modification"
+        return
+      }
+      message.value = "✅ Modifié avec succès"
     } else {
-      await api.post("/ResultatControle", payload)
+      const res = await api.post("/ResultatControle", payload)
+      if (res.data?.success === false) {
+        errorMsg.value = res.data?.message || "Erreur enregistrement"
+        return
+      }
       message.value = "✅ Contrôle enregistré avec succès"
     }
 
     await loadResultats()
     resetForm()
   } catch (err) {
+    console.error("❌ ERREUR :", err.response?.data)
     errorMsg.value = err.response?.data?.message || "Erreur lors de l'enregistrement"
-    console.error(err)
   } finally {
     loading.value = false
   }
+}
+
+// ====================== AUTRES ======================
+const confirmDelete = (id) => {
+  if (confirm("Supprimer ce contrôle ?")) {
+    api.delete(`/ResultatControle/${id}`)
+      .then(() => {
+        message.value = "✅ Supprimé avec succès"
+        loadResultats()
+      })
+      .catch(() => errorMsg.value = "Erreur suppression")
+  }
+}
+
+const editControle = (res) => {
+  editingId.value = res.id
+  form.value = {
+    utilisateurId: res.utilisateurId,
+    codeMachine: res.codeMachine,
+    codeArticle: res.codeArticle,
+    numOF: res.numOF,
+    quantite: res.quantite,
+    cadence: res.cadence
+  }
+  finalStatut.value = res.statutLot || ""
+  solutionGlobale.value = res.solutionGlobale || ""
+  testResults.value = [
+    { nbDefauts: res.nbDefautsTest1 || 0, echantillons: [] },
+    { nbDefauts: res.nbDefautsTest2 || 0, echantillons: [] }
+  ]
+  isFinished.value = true
+  onCodeArticleChange()
 }
 
 const resetForm = () => {
@@ -417,57 +497,18 @@ const resetForm = () => {
   echantillons.value = []
 }
 
-const editControle = (res) => {
-  editingId.value = res.id
-  form.value.utilisateurId = res.utilisateurId
-  form.value.codeMachine = res.codeMachine
-  form.value.codeArticle = res.codeArticle
-  form.value.numOF = res.numOF
-  form.value.quantite = res.quantite
-  form.value.cadence = res.cadence
-  finalStatut.value = res.statutLot || ""
-  solutionGlobale.value = res.solutionGlobale || ""
-  isFinished.value = true
-
-  onCodeArticleChange()
-}
-
-const confirmDelete = async (id) => {
-  if (!confirm("Supprimer ce contrôle ?")) return
-  try {
-    await api.delete(`/ResultatControle/${id}`)
-    message.value = "✅ Contrôle supprimé"
-    await loadResultats()
-  } catch (e) {
-    errorMsg.value = "Erreur lors de la suppression"
-  }
-}
-
-// Chargement
+// ====================== CHARGEMENT ======================
 const loadUtilisateurs = async () => {
-  try {
-    utilisateurs.value = (await api.get("/Utilisateur")).data
-  } catch {
-  }
+  utilisateurs.value = (await api.get("/Utilisateur")).data || []
 }
 const loadMachines = async () => {
-  try {
-    machines.value = (await api.get("/Machine")).data
-  } catch {
-  }
+  machines.value = (await api.get("/Machine")).data || []
 }
 const loadDefauts = async () => {
-  try {
-    defauts.value = (await api.get("/TypeDefaut")).data || []
-  } catch (e) {
-    console.error(e)
-  }
+  defauts.value = (await api.get("/TypeDefaut")).data || []
 }
 const loadResultats = async () => {
-  try {
-    resultats.value = (await api.get("/ResultatControle")).data
-  } catch {
-  }
+  resultats.value = (await api.get("/ResultatControle")).data || []
 }
 
 onMounted(async () => {

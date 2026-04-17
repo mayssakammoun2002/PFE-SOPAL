@@ -321,32 +321,43 @@ const handleSubmit = async () => {
   errorMessage.value = ''
 
   try {
-    const response = await axios.post(
-      'http://localhost:5100/api/Utilisateur/signin',
-      {
-        email: email.value.trim(),
-        password: password.value
-      }
-    )
+    // Dans ta page SignIn, après succès :
+    // Dans ta page SignIn, après succès :
+    const response = await axios.post('http://localhost:5100/api/Utilisateur/signin', {
+      email: email.value,
+      password: password.value,
+    })
 
-    // Sauvegarde des données utilisateur
+    localStorage.setItem('user', JSON.stringify({
+      id: response.data.id,
+      email: response.data.email,
+      role: response.data.role,
+      token: response.data.token
+    }))
+
+// ✅ Redirection selon le rôle
+    const role = response.data.role
+
+    if (role === 'Admin') {
+      router.push('/form_crudUser')   // 👈 vérifie que cette route existe
+    } else if (role === 'User') {
+      router.push('/form_resultat_de_controle')
+    } else {
+      router.push('/')
+    }
+
+    // ✅ save user
     localStorage.setItem('user', JSON.stringify(response.data))
 
-    // Redirection après connexion réussie
-    router.push('/form_resultat_de_controle')   // Change selon ta route principale
-
-    console.log('Connexion réussie', response.data)
-
-  } catch (error: any) {
-    console.error(error)
-
-    if (error.response?.status === 401) {
-      errorMessage.value = "Email ou mot de passe incorrect."
-    } else if (error.message.includes("Network Error")) {
-      errorMessage.value = "Impossible de se connecter au serveur. Vérifiez que l'API est bien démarrée sur http://localhost:5100"
+    // ✅ FIX ICI
+    if (response.data.role === "Admin") {
+      router.push('/form_crudUser')
     } else {
-      errorMessage.value = "Une erreur est survenue lors de la connexion."
+      router.push('/form_resultat_de_controle')
     }
+
+  } catch (error) {
+    errorMessage.value = "Email ou mot de passe incorrect."
   } finally {
     loading.value = false
   }

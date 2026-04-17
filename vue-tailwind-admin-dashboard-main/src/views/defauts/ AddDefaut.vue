@@ -5,7 +5,7 @@
     <div class="space-y-6">
 
       <!-- ================= FORMULAIRE ================= -->
-      <ComponentCard :title="editingId ? 'Modifier Type de Défaut' : 'Ajouter Type de Défaut'">
+      <ComponentCard :title="editingId ? 'Modifier Défaut' : 'Ajouter Défaut'">
 
         <div v-if="errorMsg" class="p-4 mb-4 bg-red-50 border border-red-200 text-red-700 rounded">
           {{ errorMsg }}
@@ -14,29 +14,29 @@
         <form @submit.prevent="submitDefaut" class="space-y-4">
 
           <div>
-            <label class="block mb-2 text-sm font-medium">Nom défaut      <span class="text-red-600">*</span></label>
+            <label class="block mb-2 text-sm font-medium">Nom défaut <span class="text-red-600">*</span></label>
             <input v-model="form.nomDefaut" type="text" class="w-full border p-2 rounded" required />
           </div>
 
           <div>
-            <label class="block mb-2 text-sm font-medium">Description     <span class="text-red-600">*</span> </label>
-
+            <label class="block mb-2 text-sm font-medium">Description <span class="text-red-600">*</span></label>
             <textarea v-model="form.description" class="w-full border p-2 rounded" required></textarea>
           </div>
 
+          <!-- ✅ NEW -->
           <div>
-            <label class="block mb-2 text-sm font-medium">Solution      <span class="text-red-600">*</span></label>
+            <label class="block mb-2 text-sm font-medium">Cause probable <span class="text-red-600">*</span></label>
+            <textarea v-model="form.causeProbable" class="w-full border p-2 rounded" required></textarea>
+          </div>
+
+          <div>
+            <label class="block mb-2 text-sm font-medium">Solution <span class="text-red-600">*</span></label>
             <textarea v-model="form.solution" class="w-full border p-2 rounded" required></textarea>
           </div>
 
           <div>
             <label class="block mb-2 text-sm font-medium">Fréquence</label>
             <input v-model="form.frequence" type="number" class="w-full border p-2 rounded" />
-          </div>
-
-          <div>
-            <label class="block mb-2 text-sm font-medium">Code Article      <span class="text-red-600">*</span></label>
-            <input v-model="form.codeArticle" type="text" class="w-full border p-2 rounded" required />
           </div>
 
           <!-- IMAGE -->
@@ -66,8 +66,7 @@
             <button
               type="button"
               @click="resetForm"
-              class="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
-              :disabled="loading"
+              class="px-5 py-2 border border-gray-300 rounded hover:bg-gray-50"
             >
               Annuler
             </button>
@@ -76,8 +75,8 @@
         </form>
       </ComponentCard>
 
-      <!-- ================= TABLEAU STYLE PRODUIT ================= -->
-      <ComponentCard title="Liste Types Défauts">
+      <!-- ================= TABLE ================= -->
+      <ComponentCard title="Liste des Défauts">
 
         <div v-if="defauts.length === 0" class="text-center py-6 text-gray-500">
           Aucun défaut
@@ -86,49 +85,37 @@
         <table v-else class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
           <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nom</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Solution</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fréquence</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Code</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Photo</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+            <th class="px-6 py-3">Nom</th>
+            <th class="px-6 py-3">Description</th>
+            <th class="px-6 py-3">Cause</th> <!-- ✅ -->
+            <th class="px-6 py-3">Solution</th>
+            <th class="px-6 py-3">Fréquence</th>
+            <th class="px-6 py-3">Photo</th>
+            <th class="px-6 py-3">Actions</th>
           </tr>
           </thead>
 
           <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-for="d in defauts" :key="d.id" class="hover:bg-gray-50">
+          <tr v-for="d in defauts" :key="d.id">
 
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-              {{ d.nomDefaut }}
-            </td>
+            <td class="px-6 py-4">{{ d.nomDefaut }}</td>
 
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              {{ truncate(d.description) }}
-            </td>
+            <td class="px-6 py-4">{{ truncate(d.description) }}</td>
 
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              {{ truncate(d.solution) }}
-            </td>
+            <!-- ✅ -->
+            <td class="px-6 py-4">{{ truncate(d.causeProbable) }}</td>
 
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              {{ d.frequence || '-' }}
-            </td>
+            <td class="px-6 py-4">{{ truncate(d.solution) }}</td>
 
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              {{ d.codeArticle }}
-            </td>
+            <td class="px-6 py-4">{{ d.frequence || '-' }}</td>
 
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              <img
-                v-if="d.imagePath"
-                :src="`http://localhost:5100/images/${d.imagePath}`"
-                class="w-30 h-30 rounded object-cover"
-              />
+            <td class="px-6 py-4">
+              <img v-if="d.imagePath"
+                   :src="`http://localhost:5100/images/${d.imagePath}`"
+                   class="w-20 h-20 object-cover rounded" />
               <span v-else>-</span>
             </td>
 
-            <!-- ✅ FIXED ACTIONS (NO nested td) -->
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
               <div class="flex items-center gap-4">
 
@@ -159,7 +146,7 @@
                       stroke-linecap="round"
                       stroke-linejoin="round"
                       stroke-width="2"
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      d="M19 7L5 7M10 11V17M14 11V17M6 7L7 19C7 20.1046 7.89543 21 9 21H15C16.1046 21 17 20.1046 17 19L18 7M9 7V5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7"
                     />
                   </svg>
                 </button>
@@ -179,23 +166,21 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import api from '@/services/api'
 
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import AdminLayout from '@/components/layout/AdminLayout.vue'
 import ComponentCard from '@/components/common/ComponentCard.vue'
 
-const API = '/api/TypeDefaut'
-
-const currentPageTitle = ref("Gestion Types de Défauts")
+const currentPageTitle = ref("Gestion des Défauts")
 const errorMsg = ref('')
 
 const form = ref({
   nomDefaut: '',
   description: '',
+  causeProbable: '', // ✅
   solution: '',
-  frequence: 0,
-  codeArticle: ''
+  frequence: 0
 })
 
 const defauts = ref([])
@@ -206,12 +191,8 @@ const editingId = ref(null)
 
 /* LOAD */
 const loadDefauts = async () => {
-  try {
-    const res = await axios.get(API)
-    defauts.value = res.data
-  } catch {
-    errorMsg.value = "Impossible de charger les données"
-  }
+  const res = await api.get('/TypeDefaut')
+  defauts.value = res.data
 }
 
 onMounted(loadDefauts)
@@ -221,54 +202,50 @@ const openFile = () => fileInput.value.click()
 
 const handleImage = (e) => {
   const file = e.target.files[0]
-  if (!file) return
   imageFile.value = file
   imagePreview.value = URL.createObjectURL(file)
 }
 
 /* SUBMIT */
 const submitDefaut = async () => {
-  try {
-    const fd = new FormData()
+  const fd = new FormData()
 
-    fd.append('NomDefaut', form.value.nomDefaut)
-    fd.append('Description', form.value.description)
-    fd.append('Solution', form.value.solution)
-    fd.append('Frequence', form.value.frequence)
-    fd.append('CodeArticle', form.value.codeArticle)
+  fd.append('NomDefaut', form.value.nomDefaut)
+  fd.append('Description', form.value.description)
+  fd.append('CauseProbable', form.value.causeProbable) // ✅
+  fd.append('Solution', form.value.solution)
+  fd.append('Frequence', form.value.frequence)
 
-    if (imageFile.value) {
-      fd.append('ImageFile', imageFile.value)
-    }
-
-    if (editingId.value) {
-      await axios.put(`${API}/${editingId.value}`, fd)
-    } else {
-      await axios.post(API, fd)
-    }
-
-    resetForm()
-    loadDefauts()
-
-  } catch {
-    errorMsg.value = "Erreur API"
+  if (imageFile.value) {
+    fd.append('ImageFile', imageFile.value)
   }
+
+  if (editingId.value) {
+    await api.put(`/TypeDefaut/${editingId.value}`, fd)
+  } else {
+    await api.post('/TypeDefaut', fd)
+  }
+
+  resetForm()
+  loadDefauts()
 }
 
 /* EDIT */
 const editDefaut = (d) => {
-  form.value = { ...d }
+  form.value = {
+    nomDefaut: d.nomDefaut,
+    description: d.description,
+    causeProbable: d.causeProbable,
+    solution: d.solution,
+    frequence: d.frequence
+  }
   editingId.value = d.id
 }
 
 /* DELETE */
 const deleteDefaut = async (id) => {
-  try {
-    await axios.delete(`${API}/${id}`)
-    loadDefauts()
-  } catch {
-    errorMsg.value = "Erreur suppression"
-  }
+  await api.delete(`/TypeDefaut/${id}`)
+  loadDefauts()
 }
 
 /* RESET */
@@ -276,37 +253,16 @@ const resetForm = () => {
   form.value = {
     nomDefaut: '',
     description: '',
+    causeProbable: '',
     solution: '',
-    frequence: 0,
-    codeArticle: ''
+    frequence: 0
   }
   editingId.value = null
   imageFile.value = null
   imagePreview.value = null
-  fileInput.value.value = null
 }
 
 /* UTILS */
 const truncate = (text, n = 40) =>
   text?.length > n ? text.slice(0, n) + '...' : text
 </script>
-
-<style scoped>
-.space-y-6 {
-  padding: 20px;
-  background: #f8fafc;
-}
-
-table {
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-thead {
-  background: #f9fafb;
-}
-
-td {
-  color: #475569;
-}
-</style>
