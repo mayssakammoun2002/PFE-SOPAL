@@ -42,8 +42,8 @@ const saveMachine = async () => {
   errorMessage.value = ''
   successMessage.value = ''
 
-  if (!machine.value.codeMachine || machine.value.codeMachine.length !== 8) {
-    errorMessage.value = "Code machine doit contenir 8 caractères"
+  if (!machine.value.codeMachine?.trim()) {
+    errorMessage.value = "Code machine obligatoire"
     return
   }
 
@@ -115,8 +115,7 @@ onMounted(fetchMachines)
     <PageBreadcrumb :pageTitle="currentPageTitle" />
 
     <!-- Formulaire Ajout / Édition -->
-    <ComponentCard :title="editingId ? 'Modifier la Machine' : 'Ajouter une Machine'">
-      <div v-if="successMessage" class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg">
+    <ComponentCard :title="editingCode ? 'Modifier la Machine' : 'Ajouter une Machine'">      <div v-if="successMessage" class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg">
         {{ successMessage }}
       </div>
       <div v-if="errorMessage" class="mb-4 p-4 bg-red-100 text-red-800 rounded-lg">
@@ -131,10 +130,8 @@ onMounted(fetchMachines)
           <input
             v-model="machine.codeMachine"
             type="text"
-            maxlength="8"
-            placeholder="Ex: MAC00001"
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
-            :disabled="!!editingId"
+            placeholder="Ex: MAC001"
+            class="w-full px-4 py-2 border rounded-lg"
           />
         </div>
 

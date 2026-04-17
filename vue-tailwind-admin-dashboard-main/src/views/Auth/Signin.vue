@@ -321,36 +321,21 @@ const handleSubmit = async () => {
   errorMessage.value = ''
 
   try {
-    // Dans ta page SignIn, après succès :
-    // Dans ta page SignIn, après succès :
     const response = await axios.post('http://localhost:5100/api/Utilisateur/signin', {
       email: email.value,
       password: password.value,
     })
 
-    localStorage.setItem('user', JSON.stringify({
-      id: response.data.id,
-      email: response.data.email,
-      role: response.data.role,
-      token: response.data.token
-    }))
+    const { id, email: userEmail, role, token } = response.data
 
-// ✅ Redirection selon le rôle
-    const role = response.data.role
+    // ✅ Une seule sauvegarde propre
+    localStorage.setItem('user', JSON.stringify({ id, email: userEmail, role, token }))
 
+    // ✅ Vérification que le token est bien là
+    console.log('Token sauvegardé :', token)
+
+    // ✅ Une seule redirection
     if (role === 'Admin') {
-      router.push('/form_crudUser')   // 👈 vérifie que cette route existe
-    } else if (role === 'User') {
-      router.push('/form_resultat_de_controle')
-    } else {
-      router.push('/')
-    }
-
-    // ✅ save user
-    localStorage.setItem('user', JSON.stringify(response.data))
-
-    // ✅ FIX ICI
-    if (response.data.role === "Admin") {
       router.push('/form_crudUser')
     } else {
       router.push('/form_resultat_de_controle')
