@@ -137,22 +137,137 @@
             </button>
           </div>
 
-          <!-- Résultat Final -->
-          <div v-if="isFinished" class="p-8 rounded-3xl text-center border-4"
-               :class="finalStatut === 'Conforme' ? 'bg-green-100 border-green-400' : 'bg-red-100 border-red-400'">
-            <div class="text-6xl mb-4">{{ finalStatut === 'Conforme' ? '✅' : '❌' }}</div>
-            <h3 class="text-3xl font-bold">
-              {{ finalStatut === 'Conforme' ? 'Lot Validé ✅' : 'Lot Non Validé - À Éliminer ❌' }}
-            </h3>
-            <div v-if="finalStatut === 'Non Conforme'" class="mt-6">
-              <label class="block text-sm font-medium mb-2 text-red-700">Solution Globale Corrective *</label>
-              <textarea v-model="solutionGlobale" rows="3" class="w-full border p-4 rounded-2xl"></textarea>
-            </div>
-          </div>
+          <!-- ==================== RÉSULTAT FINAL ==================== -->
+          <div v-if="isFinished" class="p-8 rounded-3xl border-4"
+               :class="finalStatut === 'Conforme'
+                 ? 'bg-green-100 border-green-400 text-center'
+                 : 'bg-red-50 border-red-300'">
 
-          <button v-if="isFinished || editingId" type="submit" :disabled="loading"
+            <!-- CONFORME -->
+            <template v-if="finalStatut === 'Conforme'">
+              <div class="text-6xl mb-4">✅</div>
+              <h3 class="text-3xl font-bold text-green-800">Lot Validé ✅</h3>
+            </template>
+
+            <!-- NON CONFORME -->
+            <template v-else>
+              <div class="text-center mb-6">
+                <div class="text-6xl mb-3">❌</div>
+                <h3 class="text-3xl font-bold text-red-700">Lot Non Validé — À Éliminer</h3>
+                <p v-if="defautDetecte" class="mt-2 text-red-600 text-sm font-medium">
+                  Défaut détecté : {{ defautDetecte }}
+                </p>
+              </div>
+
+              <!-- CHATBOT SOPAL -->
+              <div class="bg-white rounded-2xl border border-red-200 overflow-hidden shadow-sm mt-4">
+
+                <!-- Header chatbot -->
+                <div class="flex items-center gap-3 px-5 py-3 bg-gray-50 border-b border-gray-200">
+                  <span :class="backendOnline ? 'bg-green-500' : 'bg-red-400'"
+                        class="w-2.5 h-2.5 rounded-full transition-colors duration-300"></span>
+                  <span class="font-semibold text-sm text-gray-700">Assistant SOPAL — Défauthèque FA0214</span>
+                  <span class="ml-auto text-xs text-gray-400 font-mono">
+                    {{ backendOnline ? 'RAG Local · Streaming' : 'Hors ligne' }}
+                  </span>
+                </div>
+
+                <!-- Messages -->
+                <div ref="chatBox" class="h-80 overflow-y-auto p-4 flex flex-col gap-4 bg-gray-50/40">
+                  <div v-for="(msg, i) in chatMessages" :key="i"
+                       :class="msg.role === 'user' ? 'self-end items-end' : 'self-start items-start'"
+                       class="flex flex-col max-w-sm lg:max-w-lg">
+                    <span class="text-xs text-gray-400 mb-1 px-1"
+                          :class="msg.role === 'user' ? 'text-right' : ''">
+                      {{ msg.role === 'user' ? 'Opérateur' : '🤖 Assistant SOPAL' }}
+                    </span>
+                    <div class="px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-line"
+                         :class="msg.role === 'user'
+                           ? 'bg-blue-600 text-white rounded-tr-sm'
+                           : 'bg-white text-gray-800 border border-gray-200 rounded-tl-sm shadow-sm'">
+                      {{ msg.content }}
+                      <!-- Curseur clignotant pendant le streaming -->
+                      <span v-if="msg.streaming" class="inline-block w-0.5 h-4 bg-gray-500 ml-0.5 animate-pulse"></span>
+                    </div>
+                  </div>
+
+                  <!-- Typing indicator (avant que le 1er token arrive) -->
+                  <div v-if="chatLoading && !isStreaming" class="self-start flex flex-col items-start">
+                    <span class="text-xs text-gray-400 mb-1 px-1">🤖 Assistant SOPAL</span>
+                    <div class="bg-white border border-gray-200 px-4 py-3 rounded-2xl rounded-tl-sm shadow-sm flex gap-1.5 items-center">
+                      <span v-for="n in 3" :key="n"
+                            class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                            :style="{ animationDelay: (n - 1) * 0.15 + 's' }"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Suggestions rapides -->
+                <div class="flex flex-wrap gap-2 px-4 py-3 border-t border-gray-100 bg-white">
+                  <button
+                    v-for="sug in chatSuggestions"
+                    :key="sug"
+                    @click="sendChatMessage(sug)"
+                    :disabled="chatLoading"
+                    class="text-xs px-3 py-1.5 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-blue-400 hover:text-blue-600 transition disabled:opacity-40"
+                  >
+                    {{ sug }}
+                  </button>
+                </div>
+
+                <!-- Input zone -->
+                <div class="flex gap-2 p-3 border-t border-gray-200 bg-white">
+                  <input
+                    v-model="chatInput"
+                    @keyup.enter="sendChatMessage(chatInput)"
+                    placeholder="Poser une question sur ce défaut..."
+                    :disabled="chatLoading"
+                    class="flex-1 border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50"
+                  />
+                  <button
+                    @click="sendChatMessage(chatInput)"
+                    :disabled="!chatInput.trim() || chatLoading"
+                    class="bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-xl text-sm font-medium transition"
+                  >
+                    Envoyer
+                  </button>
+                </div>
+
+                <!-- Bouton copier solution -->
+                <div v-if="lastBotResponse" class="px-3 pb-3 bg-white">
+                  <button
+                    @click="copierSolutionDepuisChat"
+                    class="w-full text-xs text-blue-600 border border-blue-200 rounded-xl py-2 hover:bg-blue-50 transition flex items-center justify-center gap-2"
+                  >
+                    📋 Copier la dernière réponse dans "Solution Corrective"
+                  </button>
+                </div>
+              </div>
+
+              <!-- Solution Corrective -->
+              <div class="mt-5">
+                <label class="block text-sm font-medium mb-2 text-red-700">
+                  Solution Globale Corrective <span class="text-red-500">*</span>
+                </label>
+                <textarea
+                  v-model="solutionGlobale"
+                  rows="3"
+                  placeholder="Saisir ou coller la solution corrective depuis l'assistant..."
+                  class="w-full border border-red-200 p-4 rounded-2xl text-sm focus:ring-2 focus:ring-red-300 focus:outline-none"
+                ></textarea>
+                <button
+                  @click="validerSolution"
+                  class="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition">
+                  ✅ Valider la solution
+                </button>
+              </div>
+            </template>
+          </div>
+          <!-- ==================== FIN RÉSULTAT FINAL ==================== -->
+
+          <button v-if="isFinished || editingId" type="submit" :disabled="loading || (finalStatut === 'Non Conforme' && !solutionValidee)"
                   class="mt-6 w-full py-5 rounded-2xl font-semibold text-xl transition"
-                  :class="editingId ? 'bg-orange-600 hover:bg-orange-700' : 'bg-green-600 hover:bg-green-700'">
+                  :class="editingId ? 'bg-orange-600 hover:bg-orange-700 text-white' : 'bg-green-600 hover:bg-green-700 text-white'">
             {{ loading ? "Enregistrement en cours..." : editingId ? "Modifier le Contrôle" : "Enregistrer le Contrôle" }}
           </button>
 
@@ -192,46 +307,29 @@
               <td class="border p-3 text-center">{{ res.nbDefautsTest1 }}</td>
               <td class="border p-3 text-center">{{ res.nbDefautsTest2 }}</td>
               <td class="border p-3 text-center">
-                  <span :class="res.statutLot === 'Conforme' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'" class="px-4 py-1 rounded-full text-xs font-semibold">
-                    {{ res.statutLot }}
-                  </span>
-              </td><td class="border p-3 text-center">
-              <div class="flex gap-4 justify-center">
-
-                <!-- ✏️ Modifier -->
-                <button
-                  @click="editControle(res)"
-                  title="Modifier"
-                  class="text-indigo-600 hover:text-indigo-900 transition duration-150 hover:scale-110"
-                >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                    />
-                  </svg>
-                </button>
-
-                <!-- 🗑 Supprimer -->
-                <button
-                  @click="confirmDelete(res.id)"
-                  title="Supprimer"
-                  class="text-red-600 hover:text-red-800 transition duration-150 hover:scale-110"
-                >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
-                </button>
-
-              </div>
-            </td>
+                <span :class="res.statutLot === 'Conforme' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+                      class="px-4 py-1 rounded-full text-xs font-semibold">
+                  {{ res.statutLot }}
+                </span>
+              </td>
+              <td class="border p-3 text-center">
+                <div class="flex gap-4 justify-center">
+                  <button @click="editControle(res)" title="Modifier"
+                          class="text-indigo-600 hover:text-indigo-900 transition duration-150 hover:scale-110">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                    </svg>
+                  </button>
+                  <button @click="confirmDelete(res.id)" title="Supprimer"
+                          class="text-red-600 hover:text-red-800 transition duration-150 hover:scale-110">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
             </tr>
             <tr v-if="resultats.length === 0">
               <td colspan="11" class="text-center p-8 text-gray-500">Aucun contrôle enregistré</td>
@@ -243,15 +341,16 @@
     </div>
   </AdminLayout>
 </template>
+
 <script setup>
-import { ref, onMounted, computed } from "vue"
-import api from '@/services/api'  // ✅ SEULEMENT ÇA, plus d'axios direct
+import { ref, onMounted, computed, nextTick } from "vue"
+import api from '@/services/api'
 
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import AdminLayout from '@/components/layout/AdminLayout.vue'
 import ComponentCard from '@/components/common/ComponentCard.vue'
 
-// ====================== STATE ======================
+// ====================== STATE GÉNÉRAL ======================
 const currentPageTitle = ref("Résultat de Contrôle")
 const loading = ref(false)
 const message = ref("")
@@ -267,7 +366,7 @@ const designation = ref("")
 const cadenceBase = ref(0)
 const tailleEchantillons = ref(3)
 const isProduitInconnu = ref(false)
-
+const solutionValidee = ref(false)
 const form = ref({
   utilisateurId: null,
   codeMachine: "",
@@ -283,13 +382,201 @@ const echantillons = ref([])
 const isFinished = ref(false)
 const finalStatut = ref("")
 const solutionGlobale = ref("")
+const defautDetecte = ref("")
 
+// ====================== STATE CHATBOT ======================
+const chatMessages = ref([])
+const chatInput = ref("")
+const chatLoading = ref(false)
+const isStreaming = ref(false)   // ✅ NOUVEAU : true quand les tokens arrivent
+const chatBox = ref(null)
+const backendOnline = ref(false)
+const lastBotResponse = ref("")
+
+const chatSuggestions = ref([
+  "Quelles sont les causes ?",
+  "Montre les remèdes étape par étape",
+  "Température idéale pour ce défaut ?",
+  "Comment éviter ce défaut ?"
+])
+
+const BACKEND_URL = "http://localhost:8000"
+const validerSolution = () => {
+  errorMsg.value = ""
+  message.value = ""
+
+  if (!solutionGlobale.value?.trim()) {
+    errorMsg.value = "❌ Aucune solution à valider"
+    return
+  }
+
+  solutionValidee.value = true   // ✅ CORRIGÉ
+  message.value = "✅ Solution validée avec succès"
+}
 // ====================== COMPUTED ======================
 const defautsParProduit = computed(() => {
   const code = form.value.codeArticle?.trim().toUpperCase()
   if (code && isProduitInconnu.value) return defauts.value
   return defauts.value.filter(d => d.codeArticle === code)
 })
+
+// ====================== CHATBOT ======================
+
+const checkBackendHealth = async () => {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/health`, { signal: AbortSignal.timeout(3000) })
+    backendOnline.value = res.ok
+  } catch {
+    backendOnline.value = false
+  }
+}
+
+const initChat = (defautName) => {
+  defautDetecte.value = defautName || ""
+  lastBotResponse.value = ""
+
+  const welcomeMsg = defautName
+    ? `Défaut détecté : ${defautName}\n\nJe suis l'assistant SOPAL basé sur votre défauthèque FA0214. Posez vos questions ou choisissez une suggestion ci-dessous.`
+    : `Lot Non Conforme détecté.\n\nDécrivez le défaut observé pour que je puisse vous aider.`
+
+  chatMessages.value = [{ role: "bot", content: welcomeMsg, streaming: false }]
+
+  if (defautName) {
+    chatSuggestions.value = [
+      `Causes probables de "${defautName}" ?`,
+      "Remèdes étape par étape",
+      "Comment contrôler la température ?",
+      "Quand envoyer en retouche ?"
+    ]
+  }
+}
+
+// ✅ FONCTION CORRIGÉE : utilise le streaming SSE
+const sendChatMessage = async (text) => {
+  if (!text?.trim() || chatLoading.value) return
+  const question = text.trim()
+  chatInput.value = ""
+
+  // Ajouter le message utilisateur
+  chatMessages.value.push({ role: "user", content: question, streaming: false })
+  chatLoading.value = true
+  isStreaming.value = false
+  await scrollChat()
+
+  // Ajouter un message bot vide qu'on va remplir token par token
+  const botMsgIndex = chatMessages.value.length
+  chatMessages.value.push({ role: "bot", content: "", streaming: true })
+  await scrollChat()
+
+  let fullText = ""
+
+  try {
+    // ✅ Appel à /api/chat/stream (Server-Sent Events)
+    const response = await fetch(`${BACKEND_URL}/api/chat/stream`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: question,
+        defaut_context: defautDetecte.value || ""
+      })
+      // ⚠️ PAS de AbortSignal.timeout ici — le streaming peut prendre du temps
+    })
+
+    if (!response.ok) throw new Error(`HTTP ${response.status}`)
+
+    // Lire le stream SSE ligne par ligne
+    const reader = response.body.getReader()
+    const decoder = new TextDecoder()
+
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+
+      // Décoder le chunk reçu
+      const text = decoder.decode(value, { stream: true })
+      const lines = text.split("\n")
+
+      for (const line of lines) {
+        if (!line.startsWith("data: ")) continue
+
+        const payload = line.slice(6).trim()
+        if (!payload) continue
+
+        // Signal de fin
+        if (payload === "[DONE]") {
+          chatMessages.value[botMsgIndex].streaming = false
+          break
+        }
+
+        try {
+          const chunk = JSON.parse(payload)
+
+          // Erreur remontée par le backend
+          if (chunk.error) {
+            chatMessages.value[botMsgIndex].content = `⚠️ ${chunk.error}`
+            chatMessages.value[botMsgIndex].streaming = false
+            backendOnline.value = false
+            break
+          }
+
+          // Token reçu → ajouter au message bot
+          if (chunk.token) {
+            isStreaming.value = true
+            fullText += chunk.token
+            chatMessages.value[botMsgIndex].content = fullText
+            await scrollChat()
+          }
+
+        } catch {
+          // Ignorer les chunks malformés
+        }
+      }
+    }
+
+    // Fin du stream
+    chatMessages.value[botMsgIndex].streaming = false
+    lastBotResponse.value = fullText
+    backendOnline.value = true
+
+    // Nouvelles suggestions après réponse
+    chatSuggestions.value = [
+      "Plus de détails sur les remèdes",
+      "Quels paramètres vérifier en premier ?",
+      "Autre cause possible ?",
+      "Température recommandée ?"
+    ]
+
+  } catch (err) {
+    backendOnline.value = false
+    const errMsg = (
+      "⚠️ Backend hors ligne.\n\n" +
+      "Démarrez le serveur :\n" +
+      "  python backend_sopal_optimised.py\n\n" +
+      "Vérifiez que Ollama tourne :\n" +
+      "  ollama serve"
+    )
+    chatMessages.value[botMsgIndex].content = errMsg
+    chatMessages.value[botMsgIndex].streaming = false
+    console.error("Erreur stream chatbot:", err)
+  } finally {
+    chatLoading.value = false
+    isStreaming.value = false
+    await scrollChat()
+  }
+}
+
+const copierSolutionDepuisChat = () => {
+  if (lastBotResponse.value) {
+    solutionGlobale.value = lastBotResponse.value
+  }
+}
+
+const scrollChat = async () => {
+  await nextTick()
+  if (chatBox.value) {
+    chatBox.value.scrollTop = chatBox.value.scrollHeight
+  }
+}
 
 // ====================== PRODUIT ======================
 const onCodeArticleChange = async () => {
@@ -301,7 +588,6 @@ const onCodeArticleChange = async () => {
     const response = await api.get(`/Produit/${code}`, {
       validateStatus: (status) => status === 200 || status === 404
     })
-
     if (response.status === 200) {
       designation.value = response.data?.designation || ""
       cadenceBase.value = response.data?.cadence || 0
@@ -357,6 +643,7 @@ const validerTestEnCours = () => {
     } else if (nbDefauts >= 2) {
       finalStatut.value = "Non Conforme"
       isFinished.value = true
+      lancerChatbot()
     } else {
       currentStep.value = 2
       initEchantillons()
@@ -364,7 +651,17 @@ const validerTestEnCours = () => {
   } else {
     finalStatut.value = nbDefauts === 0 ? "Conforme" : "Non Conforme"
     isFinished.value = true
+    if (finalStatut.value === "Non Conforme") {
+      lancerChatbot()
+    }
   }
+}
+
+const lancerChatbot = () => {
+  const { defaut1 } = extraireDefauts()
+  initChat(defaut1)
+  checkBackendHealth()
+  nextTick(() => scrollChat())
 }
 
 const extraireDefauts = () => {
@@ -391,13 +688,16 @@ const handleSubmit = async () => {
   errorMsg.value = ""
   message.value = ""
 
-  if (!form.value.utilisateurId) return errorMsg.value = "❌ Sélectionnez un Contrôleur"
-  if (!form.value.codeMachine) return errorMsg.value = "❌ Sélectionnez une Machine"
-  if (!form.value.numOF?.trim()) return errorMsg.value = "❌ Num OF obligatoire"
-  if (!form.value.codeArticle?.trim()) return errorMsg.value = "❌ Code Article obligatoire"
-  if (!form.value.quantite || form.value.quantite < 1) return errorMsg.value = "❌ Quantité > 0"
-  if (!form.value.cadence || form.value.cadence < 1) return errorMsg.value = "❌ Cadence > 0"
-
+  if (!form.value.utilisateurId) return (errorMsg.value = "❌ Sélectionnez un Contrôleur")
+  if (!form.value.codeMachine) return (errorMsg.value = "❌ Sélectionnez une Machine")
+  if (!form.value.numOF?.trim()) return (errorMsg.value = "❌ Num OF obligatoire")
+  if (!form.value.codeArticle?.trim()) return (errorMsg.value = "❌ Code Article obligatoire")
+  if (!form.value.quantite || form.value.quantite < 1) return (errorMsg.value = "❌ Quantité > 0")
+  if (!form.value.cadence || form.value.cadence < 1) return (errorMsg.value = "❌ Cadence > 0")
+  if (finalStatut.value === "Non Conforme" && !solutionValidee.value) {
+    errorMsg.value = "❌ Vous devez valider la solution avant d'enregistrer"
+    return
+  }
   loading.value = true
 
   const { defaut1, defaut2 } = extraireDefauts()
@@ -452,7 +752,7 @@ const confirmDelete = (id) => {
         message.value = "✅ Supprimé avec succès"
         loadResultats()
       })
-      .catch(() => errorMsg.value = "Erreur suppression")
+      .catch(() => (errorMsg.value = "Erreur suppression"))
   }
 }
 
@@ -468,6 +768,7 @@ const editControle = (res) => {
   }
   finalStatut.value = res.statutLot || ""
   solutionGlobale.value = res.solutionGlobale || ""
+  defautDetecte.value = res.defaut1 || ""
   testResults.value = [
     { nbDefauts: res.nbDefautsTest1 || 0, echantillons: [] },
     { nbDefauts: res.nbDefautsTest2 || 0, echantillons: [] }
@@ -493,25 +794,22 @@ const resetForm = () => {
   isFinished.value = false
   finalStatut.value = ""
   solutionGlobale.value = ""
+  defautDetecte.value = ""
   currentStep.value = 1
   echantillons.value = []
+  chatMessages.value = []
+  lastBotResponse.value = ""
+  isStreaming.value = false
 }
 
 // ====================== CHARGEMENT ======================
-const loadUtilisateurs = async () => {
-  utilisateurs.value = (await api.get("/Utilisateur")).data || []
-}
-const loadMachines = async () => {
-  machines.value = (await api.get("/Machine")).data || []
-}
-const loadDefauts = async () => {
-  defauts.value = (await api.get("/TypeDefaut")).data || []
-}
-const loadResultats = async () => {
-  resultats.value = (await api.get("/ResultatControle")).data || []
-}
+const loadUtilisateurs = async () => { utilisateurs.value = (await api.get("/Utilisateur")).data || [] }
+const loadMachines = async () => { machines.value = (await api.get("/Machine")).data || [] }
+const loadDefauts = async () => { defauts.value = (await api.get("/TypeDefaut")).data || [] }
+const loadResultats = async () => { resultats.value = (await api.get("/ResultatControle")).data || [] }
 
 onMounted(async () => {
   await Promise.all([loadUtilisateurs(), loadMachines(), loadDefauts(), loadResultats()])
+  checkBackendHealth()
 })
 </script>

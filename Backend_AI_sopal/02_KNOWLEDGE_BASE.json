@@ -1,0 +1,377 @@
+{
+  "defauthèque": {
+    "metadata": {
+      "code": "FA0214",
+      "version": "1",
+      "date": "2020-11-24",
+      "entreprise": "SOPAL - Fonderie",
+      "workshop": "Fonderie",
+      "station": "Poste de travail Fonderie",
+      "quality_zone": "Aspect"
+    },
+    "defects": [
+      {
+        "id": 1,
+        "name": "Les criques (fissures)",
+        "fr_name": "Criques ou fissures",
+        "category": "Structural",
+        "description": "Ce sont des ruptures partielles qui se produisent au cours du phénomène de contraction lors de la solidification de la pièce dans le moule",
+        "image_reference": "Photo showing crack on cast part",
+        "acceptance_criteria": {
+          "reference_part": "Pièce référence N° 001",
+          "limit": "Le défaut détecté au niveau de la (Pièce référence N° 001) constitue la limite d'acceptation du défaut «Crique». Au-delà de cette limite, la pièce est considérée comme NC.",
+          "zones": ["A", "B", "C"]
+        },
+        "probable_causes": [
+          "Température métal fondu",
+          "Température du moule",
+          "Géometrie de la pièce",
+          "État de surface du moule",
+          "Composition chimique du métal fondu",
+          "Concentration du graphite",
+          "Pression ou vitesse de moulage",
+          "Grandeur des grains",
+          "Les évents et les masselottes"
+        ],
+        "production_type": ["COQ", "CBP"],
+        "remedies": [
+          {
+            "step": 1,
+            "action": "Vérifier la température de coulée",
+            "parameter": "Temperature",
+            "unit": "°C"
+          },
+          {
+            "step": 2,
+            "action": "Vérifier la température de moule",
+            "parameter": "Mold Temperature",
+            "unit": "°C"
+          },
+          {
+            "step": 3,
+            "action": "Vérifier la concentration du graphite",
+            "parameter": "Graphite %",
+            "unit": "%"
+          },
+          {
+            "step": 4,
+            "action": "Vérifier la proportion de Zinc et Magnésium dans la matière (éviter le manque de Mg et l'excès de Zn)",
+            "parameter": "Zn/Mg ratio",
+            "unit": "ratio"
+          },
+          {
+            "step": 5,
+            "action": "Vérifier la grandeur des grains de l'alliage",
+            "parameter": "Grain size",
+            "unit": "mm"
+          },
+          {
+            "step": 6,
+            "action": "Vérifier la pression (CBP) ou la vitesse de moulage (COQ)",
+            "parameter": "Pressure/Speed",
+            "unit": "bar/rpm"
+          },
+          {
+            "step": 7,
+            "action": "Vérifier l'état de surface du moule",
+            "parameter": "Mold surface",
+            "unit": "visual"
+          },
+          {
+            "step": 8,
+            "action": "Vérifier la géometrie de la pièce et le système d'alimentation, les évents et les masselottes",
+            "parameter": "Geometry/Feeding",
+            "unit": "visual"
+          }
+        ],
+        "difficulty_level": "high",
+        "operator_tips": [
+          "Les criques indiquent un problème de refroidissement inégal",
+          "Commencez par vérifier les températures (ce sont les causes les plus fréquentes)",
+          "Une géometrie complexe aggrave ce défaut"
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Les piqûres",
+        "fr_name": "Piqûres ou micro-porosités",
+        "category": "Surface",
+        "description": "Ce sont des imperfections de surface, de petites trous débouchant ou des micros piqures ont une forme cellulaire aux surfaces présentes dans la pièce",
+        "image_reference": "Photos showing pitting defect and cellular form",
+        "acceptance_criteria": {
+          "reference_part": "Pièce référence N°002",
+          "limit": "La limite d'acceptation, de point de vue taille, pour ce genre de défaut est celle présente sur la (Pièce référence N°002).",
+          "special_case": "Dans le cas d'une pièce analogue à la (Pièce référence N° 003) où ces micro piqûres ont une forme cellulaire, on la renvoie vers retouche. Après l'opération de retouche la pièce sera considérée comme NC si le défaut persiste encore / la pièce est déformée.",
+          "zones": ["A", "B", "C"]
+        },
+        "probable_causes": [
+          "Température métal fondu",
+          "Température du moule",
+          "Composition chimique du métal fondu",
+          "Pression ou vitesse de moulage",
+          "Grandeur des grains",
+          "Géometrie de la pièce et du système d'alimentation",
+          "Quantité et qualité du résine (dureté du noyau)",
+          "Les évents et les masselottes"
+        ],
+        "production_type": ["COQ", "CBP", "NOY"],
+        "remedies": [
+          {
+            "step": 1,
+            "action": "Vérifier la température de coulée et la température du moule",
+            "parameter": "Temperature",
+            "unit": "°C"
+          },
+          {
+            "step": 2,
+            "action": "Vérifier la pression et la vitesse de coulée",
+            "parameter": "Pressure/Speed",
+            "unit": "bar/rpm"
+          },
+          {
+            "step": 3,
+            "action": "Vérifier la qualité et la proportion du dosage du résine (dureté du noyau)",
+            "parameter": "Resin dosage/hardness",
+            "unit": "g/% or Brinell"
+          },
+          {
+            "step": 4,
+            "action": "Traiter le dégazage",
+            "parameter": "Degassing treatment",
+            "unit": "process check"
+          },
+          {
+            "step": 5,
+            "action": "Vérifier la géometrie de la pièce et le système d'alimentation, les évents et les masselottes",
+            "parameter": "Geometry/Feeding",
+            "unit": "visual"
+          },
+          {
+            "step": 6,
+            "action": "Vérifier la proportion de Zinc et Magnésium dans la matière (éviter le manque de Mg et l'excès de Zn)",
+            "parameter": "Zn/Mg ratio",
+            "unit": "ratio"
+          },
+          {
+            "step": 7,
+            "action": "Vérifier la grandeur des grains de l'alliage",
+            "parameter": "Grain size",
+            "unit": "mm"
+          }
+        ],
+        "difficulty_level": "medium",
+        "operator_tips": [
+          "Les piqûres cellulaires nécessitent une retouche avant acceptation",
+          "Vérifiez d'abord la température et la pression",
+          "Le dégazage est crucial pour éviter ce défaut"
+        ]
+      },
+      {
+        "id": 3,
+        "name": "Les malvenues",
+        "fr_name": "Malvenue (remplissage incomplet)",
+        "category": "Structural",
+        "description": "Ce sont des absences matières dans la pièces. En effet, il existe un manque de remplissage de la totalité de l'empreinte",
+        "image_reference": "Photo showing incomplete filling defect",
+        "acceptance_criteria": {
+          "reference_part": "Pièce référence N° 004",
+          "limit": "Le défaut détecté au niveau de la (Pièce référence N° 004) constitue la limite d'acceptation du défaut «Malvenue». Au-delà de cette limite, la pièce est considérée comme NC.",
+          "zones": ["A", "B", "C"]
+        },
+        "probable_causes": [
+          "Température métal fondu",
+          "Pression et vitesse du moulage",
+          "Les évents et les masselottes"
+        ],
+        "production_type": ["COQ", "CBP"],
+        "remedies": [
+          {
+            "step": 1,
+            "action": "Vérifier la température de fusion et les élements du moule et prolonger la durée de solidification en diminuant la vitesse de refroidissement",
+            "parameter": "Temperature/cooling speed",
+            "unit": "°C / s"
+          },
+          {
+            "step": 2,
+            "action": "Vérifier la pression afin d'éviter les élargissements brusques qui pourraient provoquer des enchaînements d'air",
+            "parameter": "Pressure",
+            "unit": "bar"
+          },
+          {
+            "step": 3,
+            "action": "Vérifier l'existance et la grandeur des events et masselottes",
+            "parameter": "Vents/feeders size",
+            "unit": "mm"
+          }
+        ],
+        "difficulty_level": "medium",
+        "operator_tips": [
+          "Une malvenue indique que le métal n'a pas rempli complètement la cavité",
+          "Vérifiez la pression en priorité - c'est la cause majeure",
+          "Assurez-vous que les évents ne sont pas bouchés"
+        ]
+      },
+      {
+        "id": 4,
+        "name": "Inclusion de métaux durs",
+        "fr_name": "Inclusion de métaux durs (hard spots)",
+        "category": "Surface",
+        "description": "Ils se présentent sous forme de petits et des traits minces à la surface de la pièce et ne sont pas susceptibles à être traiter par l'opération d'émerisage et de polissage",
+        "image_reference": "Photo showing hard metal inclusions",
+        "acceptance_criteria": {
+          "reference_part": "Pièce référence N° 005",
+          "limit": "Le défaut détecté au niveau de la (Pièce référence N° 005) constitue la limite d'acceptation du défaut «Inclusion de métaux durs». Au-delà de cette limite, la pièce est envoyée vers retouche. Après l'opération de retouche la pièce sera considérée comme NC si le défaut persiste encore / la pièce est déformée.",
+          "zones": ["A", "B", "C"],
+          "remedial_action": "retouche"
+        },
+        "probable_causes": [
+          "Composition chimique du métal",
+          "Température du métal"
+        ],
+        "production_type": ["COQ", "CBP"],
+        "remedies": [
+          {
+            "step": 1,
+            "action": "Vérifier la température du métal fondu",
+            "parameter": "Metal temperature",
+            "unit": "°C"
+          },
+          {
+            "step": 2,
+            "action": "Vérifier la qualité du laiton alimenté dans le four",
+            "parameter": "Brass quality",
+            "unit": "certification"
+          },
+          {
+            "step": 3,
+            "action": "Vérifier la comosition chimique du métal",
+            "parameter": "Chemical composition",
+            "unit": "analysis"
+          },
+          {
+            "step": 4,
+            "action": "Isoler le lot de matière NC après sa vérification par polissage d'un échantillon d'un lingot",
+            "parameter": "Batch isolation",
+            "unit": "process"
+          }
+        ],
+        "difficulty_level": "high",
+        "operator_tips": [
+          "Ce défaut vient généralement de la composition chimique du métal",
+          "Vérifiez la source du laiton - peut nécessiter supplier change",
+          "Isolation du lot crucial pour traçabilité"
+        ]
+      },
+      {
+        "id": 5,
+        "name": "Inclusion de graphite",
+        "fr_name": "Inclusion de graphite",
+        "category": "Surface",
+        "description": "Les inclusions de graphite sont liées au manque d'adhérence du poteyage sur les parois de l'empreinte de la coquille",
+        "image_reference": "Photo showing graphite inclusion",
+        "acceptance_criteria": {
+          "reference_part": "Pièce référence N° 006",
+          "limit": "Le défaut détecté au niveau de la (Pièce référence N° 006) constitue la limite d'acceptation du défaut «Inclusion de métaux durs». Au-delà de cette limite, la pièce est envoyée vers retouche. Après l'opération de retouche la pièce sera considérée comme NC si le défaut persiste encore / la pièce est déformée.",
+          "zones": ["A", "B", "C"],
+          "remedial_action": "retouche"
+        },
+        "probable_causes": [
+          "Concentration du poteyage",
+          "Temps du poteyage",
+          "Qualité du graphite"
+        ],
+        "production_type": ["COQ", "CBP"],
+        "remedies": [
+          {
+            "step": 1,
+            "action": "Vérifier le temps de poteyage",
+            "parameter": "Coating time",
+            "unit": "seconds"
+          },
+          {
+            "step": 2,
+            "action": "Diluer le bain avec l'eau non calcaire",
+            "parameter": "Coating dilution",
+            "unit": "water addition %"
+          },
+          {
+            "step": 3,
+            "action": "Décaper complétement la coquille",
+            "parameter": "Shell cleaning",
+            "unit": "process check"
+          }
+        ],
+        "difficulty_level": "medium",
+        "operator_tips": [
+          "Le graphite ne doit pas se détacher de la coquille",
+          "Le temps de poteyage est critique - ne pas dépasser les limites",
+          "Utilisez de l'eau filtrée non calcaire pour le bain"
+        ]
+      },
+      {
+        "id": 6,
+        "name": "Inclusion de sable",
+        "fr_name": "Inclusion de sable",
+        "category": "Surface",
+        "description": "Les inclusions de sable ont eu lieu en présence à un phénomène d'érosion au moment de coulée.",
+        "image_reference": "Photo showing sand inclusion defect",
+        "acceptance_criteria": {
+          "reference_part": "Pièce référence N° 007",
+          "limit": "Le défaut détecté au niveau de la (Pièce référence N° 007) constitue la limite d'acceptation du défaut «Inclusion de sable». Au-delà de cette limite, la pièce est envoyée vers retouche. Après l'opération de retouche la pièce sera considérée comme NC si le défaut persiste encore / la pièce est déformée.",
+          "zones": ["A", "B", "C"],
+          "remedial_action": "retouche"
+        },
+        "probable_causes": [
+          "Proportion du dosage du résine",
+          "Qualité du résine",
+          "Dureté du noyau",
+          "Ajustage du moule"
+        ],
+        "production_type": ["COQ", "CBP"],
+        "remedies": [
+          {
+            "step": 1,
+            "action": "Nettoyer le moule avec de l'air comprimée après la mise en place du noyau",
+            "parameter": "Mold cleaning",
+            "unit": "process check"
+          },
+          {
+            "step": 2,
+            "action": "Vérifier l'ajustage du moule",
+            "parameter": "Mold fit",
+            "unit": "visual/measurement"
+          },
+          {
+            "step": 3,
+            "action": "Vérifier la qualité du noyau",
+            "parameter": "Core quality",
+            "unit": "visual/hardness"
+          }
+        ],
+        "difficulty_level": "medium",
+        "operator_tips": [
+          "L'érosion du noyau provoque la libération de sable",
+          "Nettoyage du moule est essentiel avant coulée",
+          "Vérifiez la dureté du noyau - ne doit pas être trop fragile"
+        ]
+      }
+    ],
+    "quick_reference": {
+      "by_production_type": {
+        "COQ": [1, 2, 3, 4, 5, 6],
+        "CBP": [1, 2, 3, 4, 5, 6],
+        "NOY": [2]
+      },
+      "by_difficulty": {
+        "high": [1, 4],
+        "medium": [2, 3, 5, 6],
+        "low": []
+      },
+      "acceptance_zones": {
+        "A": "Red zone - Refused",
+        "B": "Red zone - Refused",
+        "C": "Green zone - Accepted"
+      }
+    }
+  }
+}
