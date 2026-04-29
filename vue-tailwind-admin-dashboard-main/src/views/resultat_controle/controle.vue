@@ -6,7 +6,7 @@
 
       <!-- Formulaire Principal -->
       <ComponentCard :title="editingId ? 'Modifier le Contrôle' : 'Nouveau Contrôle Qualité'">
-        <form @submit.prevent="handleSubmit" class="space-y-6 max-w-4xl">
+        <form @submit.prevent="prepareForValidation" class="space-y-6 max-w-4xl">
 
           <!-- Informations Générales -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -137,7 +137,7 @@
             </button>
           </div>
 
-          <!-- ==================== RÉSULTAT FINAL ==================== -->
+          <!-- RÉSULTAT FINAL -->
           <div v-if="isFinished" class="p-8 rounded-3xl border-4"
                :class="finalStatut === 'Conforme'
                  ? 'bg-green-100 border-green-400 text-center'
@@ -147,6 +147,7 @@
             <template v-if="finalStatut === 'Conforme'">
               <div class="text-6xl mb-4">✅</div>
               <h3 class="text-3xl font-bold text-green-800">Lot Validé ✅</h3>
+              <p class="text-gray-700 mt-3">Cliquez sur "Valider et Enregistrer" pour confirmer</p>
             </template>
 
             <!-- NON CONFORME -->
@@ -161,8 +162,6 @@
 
               <!-- CHATBOT SOPAL -->
               <div class="bg-white rounded-2xl border border-red-200 overflow-hidden shadow-sm mt-4">
-
-                <!-- Header chatbot -->
                 <div class="flex items-center gap-3 px-5 py-3 bg-gray-50 border-b border-gray-200">
                   <span :class="backendOnline ? 'bg-green-500' : 'bg-red-400'"
                         class="w-2.5 h-2.5 rounded-full transition-colors duration-300"></span>
@@ -172,13 +171,11 @@
                   </span>
                 </div>
 
-                <!-- Messages -->
                 <div ref="chatBox" class="h-80 overflow-y-auto p-4 flex flex-col gap-4 bg-gray-50/40">
                   <div v-for="(msg, i) in chatMessages" :key="i"
                        :class="msg.role === 'user' ? 'self-end items-end' : 'self-start items-start'"
                        class="flex flex-col max-w-sm lg:max-w-lg">
-                    <span class="text-xs text-gray-400 mb-1 px-1"
-                          :class="msg.role === 'user' ? 'text-right' : ''">
+                    <span class="text-xs text-gray-400 mb-1 px-1" :class="msg.role === 'user' ? 'text-right' : ''">
                       {{ msg.role === 'user' ? 'Opérateur' : '🤖 Assistant SOPAL' }}
                     </span>
                     <div class="px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-line"
@@ -186,12 +183,10 @@
                            ? 'bg-blue-600 text-white rounded-tr-sm'
                            : 'bg-white text-gray-800 border border-gray-200 rounded-tl-sm shadow-sm'">
                       {{ msg.content }}
-                      <!-- Curseur clignotant pendant le streaming -->
                       <span v-if="msg.streaming" class="inline-block w-0.5 h-4 bg-gray-500 ml-0.5 animate-pulse"></span>
                     </div>
                   </div>
 
-                  <!-- Typing indicator (avant que le 1er token arrive) -->
                   <div v-if="chatLoading && !isStreaming" class="self-start flex flex-col items-start">
                     <span class="text-xs text-gray-400 mb-1 px-1">🤖 Assistant SOPAL</span>
                     <div class="bg-white border border-gray-200 px-4 py-3 rounded-2xl rounded-tl-sm shadow-sm flex gap-1.5 items-center">
@@ -202,7 +197,6 @@
                   </div>
                 </div>
 
-                <!-- Suggestions rapides -->
                 <div class="flex flex-wrap gap-2 px-4 py-3 border-t border-gray-100 bg-white">
                   <button
                     v-for="sug in chatSuggestions"
@@ -215,7 +209,6 @@
                   </button>
                 </div>
 
-                <!-- Input zone -->
                 <div class="flex gap-2 p-3 border-t border-gray-200 bg-white">
                   <input
                     v-model="chatInput"
@@ -233,7 +226,6 @@
                   </button>
                 </div>
 
-                <!-- Bouton copier solution -->
                 <div v-if="lastBotResponse" class="px-3 pb-3 bg-white">
                   <button
                     @click="copierSolutionDepuisChat"
@@ -255,6 +247,7 @@
                   placeholder="Saisir ou coller la solution corrective depuis l'assistant..."
                   class="w-full border border-red-200 p-4 rounded-2xl text-sm focus:ring-2 focus:ring-red-300 focus:outline-none"
                 ></textarea>
+                <div class="text-xs text-gray-500 mt-1">{{ solutionGlobale.length }} / 5000 caractères</div>
                 <button
                   @click="validerSolution"
                   class="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition">
@@ -263,13 +256,18 @@
               </div>
             </template>
           </div>
-          <!-- ==================== FIN RÉSULTAT FINAL ==================== -->
 
-          <button v-if="isFinished || editingId" type="submit" :disabled="loading || (finalStatut === 'Non Conforme' && !solutionValidee)"
-                  class="mt-6 w-full py-5 rounded-2xl font-semibold text-xl transition"
-                  :class="editingId ? 'bg-orange-600 hover:bg-orange-700 text-white' : 'bg-green-600 hover:bg-green-700 text-white'">
-            {{ loading ? "Enregistrement en cours..." : editingId ? "Modifier le Contrôle" : "Enregistrer le Contrôle" }}
-          </button>
+          <!-- BOUTONS D'ACTION -->
+          <div v-if="isFinished || editingId" class="flex gap-3">
+            <button type="submit" :disabled="loading || (finalStatut === 'Non Conforme' && !solutionValidee)"
+                    class="flex-1 py-5 rounded-2xl font-semibold text-xl transition"
+                    :class="editingId ? 'bg-orange-600 hover:bg-orange-700 text-white' : 'bg-green-600 hover:bg-green-700 text-white'">
+              {{ loading ? "Enregistrement en cours..." : editingId ? "Modifier le Contrôle" : "Valider et Enregistrer" }}
+            </button>
+            <button type="button" @click="annuler" class="px-8 py-5 rounded-2xl font-semibold text-xl border border-gray-300 hover:bg-gray-100 transition">
+              Annuler
+            </button>
+          </div>
 
           <div v-if="errorMsg" class="p-4 bg-red-100 text-red-700 rounded-xl">{{ errorMsg }}</div>
           <div v-if="message" class="p-4 bg-green-100 text-green-700 rounded-xl">{{ message }}</div>
@@ -283,6 +281,7 @@
             <thead class="bg-gray-100">
             <tr>
               <th class="border p-3 text-left">Date</th>
+              <th class="border p-3 text-left">Contrôleur</th>
               <th class="border p-3 text-left">Code Article</th>
               <th class="border p-3 text-left">Num OF</th>
               <th class="border p-3 text-left">Machine</th>
@@ -296,8 +295,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="res in resultats" :key="res.id" class="hover:bg-gray-50">
+            <tr v-for="res in resultats" :key="res.id" class="hover:bg-gray-50 cursor-pointer"
+                @click="afficherDetailsControle(res)">
               <td class="border p-3">{{ new Date(res.dateControle || res.createdAt).toLocaleDateString('fr-FR') }}</td>
+              <td class="border p-3 font-medium">{{ getNomUtilisateur(res.utilisateurId) }}</td>
               <td class="border p-3 font-medium">{{ res.codeArticle }}</td>
               <td class="border p-3">{{ res.numOF }}</td>
               <td class="border p-3">{{ res.codeMachine }}</td>
@@ -314,14 +315,14 @@
               </td>
               <td class="border p-3 text-center">
                 <div class="flex gap-4 justify-center">
-                  <button @click="editControle(res)" title="Modifier"
+                  <button @click.stop="editControle(res)" title="Modifier"
                           class="text-indigo-600 hover:text-indigo-900 transition duration-150 hover:scale-110">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
                     </svg>
                   </button>
-                  <button @click="confirmDelete(res.id)" title="Supprimer"
+                  <button @click.stop="confirmDelete(res.id)" title="Supprimer"
                           class="text-red-600 hover:text-red-800 transition duration-150 hover:scale-110">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -332,13 +333,226 @@
               </td>
             </tr>
             <tr v-if="resultats.length === 0">
-              <td colspan="11" class="text-center p-8 text-gray-500">Aucun contrôle enregistré</td>
+              <td colspan="12" class="text-center p-8 text-gray-500">Aucun contrôle enregistré</td>
             </tr>
             </tbody>
           </table>
         </div>
       </ComponentCard>
     </div>
+
+    <!-- ==================== MODAL DE DÉTAILS (RÉDUIT) ==================== -->
+    <div v-if="showDetailsModal" class="fixed inset-0 bg-black/50 flex items-start justify-center z-50 pt-16 px-4">
+      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+
+        <!-- Header Modal -->
+        <div class="sticky top-0 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white px-5 py-4 flex justify-between items-center rounded-t-2xl">
+          <h2 class="text-lg font-bold">📋 Détails du Contrôle</h2>
+          <button @click="showDetailsModal = false" class="text-xl hover:scale-110 transition leading-none">✕</button>
+        </div>
+
+        <!-- Contenu Modal -->
+        <div class="p-5 space-y-4">
+
+          <!-- Statut Global -->
+          <div class="p-4 rounded-xl flex items-center justify-between"
+               :class="selectedResultat?.statutLot === 'Conforme'
+                 ? 'bg-green-100 border-2 border-green-400'
+                 : 'bg-red-100 border-2 border-red-400'">
+            <div>
+              <p class="text-xs text-gray-500">Statut du Lot</p>
+              <h3 class="text-xl font-bold"
+                  :class="selectedResultat?.statutLot === 'Conforme' ? 'text-green-700' : 'text-red-700'">
+                {{ selectedResultat?.statutLot === 'Conforme' ? '✅ Conforme' : '❌ Non Conforme' }}
+              </h3>
+            </div>
+            <div class="text-4xl">{{ selectedResultat?.statutLot === 'Conforme' ? '✅' : '❌' }}</div>
+          </div>
+
+          <!-- Informations Générales — grille compacte -->
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-gray-50 p-3 rounded-xl">
+              <p class="text-xs text-gray-500 mb-0.5">Date de Contrôle</p>
+              <p class="text-sm font-semibold">{{ formatDate(selectedResultat?.dateControle || selectedResultat?.createdAt) }}</p>
+            </div>
+            <!-- ✅ NOM DU CONTRÔLEUR -->
+            <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100">
+              <p class="text-xs text-gray-500 mb-0.5">Contrôleur</p>
+              <p class="text-sm font-semibold text-indigo-700">
+                👤 {{ getNomUtilisateur(selectedResultat?.utilisateurId) }}
+              </p>
+            </div>
+            <div class="bg-gray-50 p-3 rounded-xl">
+              <p class="text-xs text-gray-500 mb-0.5">Code Article</p>
+              <p class="text-sm font-semibold">{{ selectedResultat?.codeArticle }}</p>
+            </div>
+            <div class="bg-gray-50 p-3 rounded-xl">
+              <p class="text-xs text-gray-500 mb-0.5">Num OF</p>
+              <p class="text-sm font-semibold">{{ selectedResultat?.numOF }}</p>
+            </div>
+            <div class="bg-gray-50 p-3 rounded-xl">
+              <p class="text-xs text-gray-500 mb-0.5">Machine</p>
+              <p class="text-sm font-semibold">{{ selectedResultat?.codeMachine }}</p>
+            </div>
+            <div class="bg-gray-50 p-3 rounded-xl">
+              <p class="text-xs text-gray-500 mb-0.5">Quantité</p>
+              <p class="text-sm font-semibold">{{ selectedResultat?.quantite }} pièces</p>
+            </div>
+            <div class="bg-gray-50 p-3 rounded-xl">
+              <p class="text-xs text-gray-500 mb-0.5">Cadence</p>
+              <p class="text-sm font-semibold">{{ selectedResultat?.cadence }} pièces/h</p>
+            </div>
+            <div class="bg-gray-50 p-3 rounded-xl">
+              <p class="text-xs text-gray-500 mb-0.5">Taille Échantillon</p>
+              <p class="text-sm font-semibold">{{ selectedResultat?.nbEchantillons }}</p>
+            </div>
+          </div>
+
+          <!-- Résultats des Tests -->
+          <div class="border-t pt-4">
+            <h3 class="text-base font-bold mb-3">📊 Résultats des Tests</h3>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="border-2 border-blue-200 rounded-xl p-4 bg-blue-50">
+                <h4 class="font-semibold text-blue-700 mb-2 text-sm">Test 1</h4>
+                <p class="text-xs">Défauts : <span class="text-base font-bold text-red-600">{{ selectedResultat?.nbDefautsTest1 }}</span></p>
+                <p class="text-xs">Résultat : <span class="font-bold" :class="selectedResultat?.nbDefautsTest1 === 0 ? 'text-green-600' : 'text-red-600'">{{ selectedResultat?.nbDefautsTest1 === 0 ? '✅ OK' : '❌ Défaut' }}</span></p>
+              </div>
+              <div v-if="selectedResultat?.nbDefautsTest2 !== undefined" class="border-2 border-purple-200 rounded-xl p-4 bg-purple-50">
+                <h4 class="font-semibold text-purple-700 mb-2 text-sm">Test 2</h4>
+                <p class="text-xs">Défauts : <span class="text-base font-bold text-red-600">{{ selectedResultat?.nbDefautsTest2 }}</span></p>
+                <p class="text-xs">Résultat : <span class="font-bold" :class="selectedResultat?.nbDefautsTest2 === 0 ? 'text-green-600' : 'text-red-600'">{{ selectedResultat?.nbDefautsTest2 === 0 ? '✅ OK' : '❌ Défaut' }}</span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Défauts Détectés -->
+          <div v-if="selectedResultat?.defaut1 || selectedResultat?.defaut2" class="border-t pt-4">
+            <h3 class="text-base font-bold mb-3">🔴 Défauts Détectés</h3>
+            <div class="space-y-2">
+              <div v-if="selectedResultat?.defaut1" class="bg-red-50 border-l-4 border-red-500 p-3 rounded-lg">
+                <p class="text-xs text-gray-500">Défaut 1</p>
+                <p class="text-sm font-bold text-red-700">{{ selectedResultat?.defaut1 }}</p>
+              </div>
+              <div v-if="selectedResultat?.defaut2" class="bg-red-50 border-l-4 border-red-500 p-3 rounded-lg">
+                <p class="text-xs text-gray-500">Défaut 2</p>
+                <p class="text-sm font-bold text-red-700">{{ selectedResultat?.defaut2 }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Solution Corrective -->
+          <div v-if="selectedResultat?.solutionGlobale" class="border-t pt-4">
+            <h3 class="text-base font-bold mb-3">🔧 Solution Corrective</h3>
+            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-lg">
+              <p class="text-gray-700 whitespace-pre-wrap text-sm">{{ selectedResultat?.solutionGlobale }}</p>
+            </div>
+          </div>
+
+          <!-- Boutons d'Action -->
+          <div class="border-t pt-4 flex gap-3">
+            <button @click="closeAndEditControle(selectedResultat)"
+                    class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl font-semibold transition text-sm">
+              ✏️ Modifier ce Contrôle
+            </button>
+            <button @click="showDetailsModal = false"
+                    class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2.5 rounded-xl font-semibold transition text-sm">
+              Fermer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL DE CONFIRMATION ENREGISTREMENT ==================== -->
+    <div v-if="showConfirmModal" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
+      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+
+        <!-- Header -->
+        <div class="px-6 py-5 border-b">
+          <h2 class="text-xl font-bold text-gray-800">
+            {{ editingId ? '✏️ Confirmer la Modification' : '✅ Confirmer l\'Enregistrement' }}
+          </h2>
+          <p class="text-sm text-gray-500 mt-1">Vérifiez les informations avant de confirmer</p>
+        </div>
+
+        <!-- Récapitulatif -->
+        <div class="px-6 py-5 space-y-3">
+
+          <!-- Statut badge -->
+          <div class="flex items-center justify-between p-3 rounded-xl"
+               :class="confirmData.statut === 'Conforme' ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'">
+            <span class="text-sm font-medium text-gray-700">Statut du Lot</span>
+            <span class="font-bold text-sm px-3 py-1 rounded-full"
+                  :class="confirmData.statut === 'Conforme' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'">
+              {{ confirmData.statut === 'Conforme' ? '✅ Conforme' : '❌ Non Conforme' }}
+            </span>
+          </div>
+
+          <!-- Infos -->
+          <div class="grid grid-cols-2 gap-2 text-sm">
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-400">Contrôleur</p>
+              <p class="font-semibold text-gray-800">👤 {{ confirmData.utilisateur }}</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-400">Machine</p>
+              <p class="font-semibold text-gray-800">{{ confirmData.machine }}</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-400">Code Article</p>
+              <p class="font-semibold font-mono text-gray-800">{{ confirmData.codeArticle }}</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-400">Num OF</p>
+              <p class="font-semibold text-gray-800">{{ confirmData.numOF }}</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-400">Quantité</p>
+              <p class="font-semibold text-gray-800">{{ confirmData.quantite }} pièces</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-400">Cadence</p>
+              <p class="font-semibold text-gray-800">{{ confirmData.cadence }} p/h</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-400">Défauts T1</p>
+              <p class="font-semibold" :class="confirmData.nbDefautsTest1 > 0 ? 'text-red-600' : 'text-green-600'">
+                {{ confirmData.nbDefautsTest1 }}
+              </p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-400">Défauts T2</p>
+              <p class="font-semibold" :class="confirmData.nbDefautsTest2 > 0 ? 'text-red-600' : 'text-green-600'">
+                {{ confirmData.nbDefautsTest2 }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Solution (si non conforme) -->
+          <div v-if="confirmData.statut === 'Non Conforme' && confirmData.solution" class="bg-yellow-50 border border-yellow-200 rounded-xl p-3">
+            <p class="text-xs text-gray-500 mb-1">🔧 Solution Corrective</p>
+            <p class="text-xs text-gray-700 line-clamp-3">{{ confirmData.solution }}</p>
+          </div>
+        </div>
+
+        <!-- Boutons -->
+        <div class="px-6 py-4 border-t flex gap-3">
+          <button
+            @click="showConfirmModal = false"
+            class="flex-1 py-3 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition text-sm">
+            ← Retour
+          </button>
+          <button
+            @click="confirmerEtEnregistrer"
+            :disabled="loading"
+            class="flex-1 py-3 rounded-xl font-semibold text-white transition text-sm disabled:opacity-50"
+            :class="editingId ? 'bg-orange-600 hover:bg-orange-700' : 'bg-green-600 hover:bg-green-700'">
+            {{ loading ? "Enregistrement..." : editingId ? "✏️ Confirmer la modification" : "✅ Confirmer et enregistrer" }}
+          </button>
+        </div>
+      </div>
+    </div>
+
   </AdminLayout>
 </template>
 
@@ -384,11 +598,19 @@ const finalStatut = ref("")
 const solutionGlobale = ref("")
 const defautDetecte = ref("")
 
+// ====================== STATE MODALS ======================
+const showDetailsModal = ref(false)
+const selectedResultat = ref(null)
+
+// ✅ NOUVEAU : Modal de confirmation
+const showConfirmModal = ref(false)
+const confirmData = ref({})
+
 // ====================== STATE CHATBOT ======================
 const chatMessages = ref([])
 const chatInput = ref("")
 const chatLoading = ref(false)
-const isStreaming = ref(false)   // ✅ NOUVEAU : true quand les tokens arrivent
+const isStreaming = ref(false)
 const chatBox = ref(null)
 const backendOnline = ref(false)
 const lastBotResponse = ref("")
@@ -401,18 +623,7 @@ const chatSuggestions = ref([
 ])
 
 const BACKEND_URL = "http://localhost:8000"
-const validerSolution = () => {
-  errorMsg.value = ""
-  message.value = ""
 
-  if (!solutionGlobale.value?.trim()) {
-    errorMsg.value = "❌ Aucune solution à valider"
-    return
-  }
-
-  solutionValidee.value = true   // ✅ CORRIGÉ
-  message.value = "✅ Solution validée avec succès"
-}
 // ====================== COMPUTED ======================
 const defautsParProduit = computed(() => {
   const code = form.value.codeArticle?.trim().toUpperCase()
@@ -420,8 +631,35 @@ const defautsParProduit = computed(() => {
   return defauts.value.filter(d => d.codeArticle === code)
 })
 
-// ====================== CHATBOT ======================
+// ====================== FONCTIONS UTILITAIRES ======================
+const formatDate = (date) => {
+  if (!date) return "-"
+  return new Date(date).toLocaleDateString('fr-FR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
 
+const getNomUtilisateur = (id) => {
+  const u = utilisateurs.value.find(u => u.id == id)
+  return u ? `${u.firstName} ${u.lastName}` : "-"
+}
+
+// ====================== MODAL DÉTAILS ======================
+const afficherDetailsControle = (resultat) => {
+  selectedResultat.value = resultat
+  showDetailsModal.value = true
+}
+
+const closeAndEditControle = (res) => {
+  showDetailsModal.value = false
+  nextTick(() => editControle(res))
+}
+
+// ====================== CHATBOT ======================
 const checkBackendHealth = async () => {
   try {
     const res = await fetch(`${BACKEND_URL}/api/health`, { signal: AbortSignal.timeout(3000) })
@@ -451,19 +689,16 @@ const initChat = (defautName) => {
   }
 }
 
-// ✅ FONCTION CORRIGÉE : utilise le streaming SSE
 const sendChatMessage = async (text) => {
   if (!text?.trim() || chatLoading.value) return
   const question = text.trim()
   chatInput.value = ""
 
-  // Ajouter le message utilisateur
   chatMessages.value.push({ role: "user", content: question, streaming: false })
   chatLoading.value = true
   isStreaming.value = false
   await scrollChat()
 
-  // Ajouter un message bot vide qu'on va remplir token par token
   const botMsgIndex = chatMessages.value.length
   chatMessages.value.push({ role: "bot", content: "", streaming: true })
   await scrollChat()
@@ -471,20 +706,14 @@ const sendChatMessage = async (text) => {
   let fullText = ""
 
   try {
-    // ✅ Appel à /api/chat/stream (Server-Sent Events)
     const response = await fetch(`${BACKEND_URL}/api/chat/stream`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message: question,
-        defaut_context: defautDetecte.value || ""
-      })
-      // ⚠️ PAS de AbortSignal.timeout ici — le streaming peut prendre du temps
+      body: JSON.stringify({ message: question, defaut_context: defautDetecte.value || "" })
     })
 
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
-    // Lire le stream SSE ligne par ligne
     const reader = response.body.getReader()
     const decoder = new TextDecoder()
 
@@ -492,53 +721,36 @@ const sendChatMessage = async (text) => {
       const { done, value } = await reader.read()
       if (done) break
 
-      // Décoder le chunk reçu
       const text = decoder.decode(value, { stream: true })
       const lines = text.split("\n")
 
       for (const line of lines) {
         if (!line.startsWith("data: ")) continue
-
         const payload = line.slice(6).trim()
         if (!payload) continue
-
-        // Signal de fin
-        if (payload === "[DONE]") {
-          chatMessages.value[botMsgIndex].streaming = false
-          break
-        }
+        if (payload === "[DONE]") { chatMessages.value[botMsgIndex].streaming = false; break }
 
         try {
           const chunk = JSON.parse(payload)
-
-          // Erreur remontée par le backend
           if (chunk.error) {
             chatMessages.value[botMsgIndex].content = `⚠️ ${chunk.error}`
             chatMessages.value[botMsgIndex].streaming = false
             backendOnline.value = false
             break
           }
-
-          // Token reçu → ajouter au message bot
           if (chunk.token) {
             isStreaming.value = true
             fullText += chunk.token
             chatMessages.value[botMsgIndex].content = fullText
             await scrollChat()
           }
-
-        } catch {
-          // Ignorer les chunks malformés
-        }
+        } catch { /* Ignorer chunks malformés */ }
       }
     }
 
-    // Fin du stream
     chatMessages.value[botMsgIndex].streaming = false
     lastBotResponse.value = fullText
     backendOnline.value = true
-
-    // Nouvelles suggestions après réponse
     chatSuggestions.value = [
       "Plus de détails sur les remèdes",
       "Quels paramètres vérifier en premier ?",
@@ -548,14 +760,7 @@ const sendChatMessage = async (text) => {
 
   } catch (err) {
     backendOnline.value = false
-    const errMsg = (
-      "⚠️ Backend hors ligne.\n\n" +
-      "Démarrez le serveur :\n" +
-      "  python backend_sopal_optimised.py\n\n" +
-      "Vérifiez que Ollama tourne :\n" +
-      "  ollama serve"
-    )
-    chatMessages.value[botMsgIndex].content = errMsg
+    chatMessages.value[botMsgIndex].content = "⚠️ Backend hors ligne.\n\nDémarrez le serveur :\n  python backend_sopal_optimised.py\n\nVérifiez que Ollama tourne :\n  ollama serve"
     chatMessages.value[botMsgIndex].streaming = false
     console.error("Erreur stream chatbot:", err)
   } finally {
@@ -566,16 +771,18 @@ const sendChatMessage = async (text) => {
 }
 
 const copierSolutionDepuisChat = () => {
-  if (lastBotResponse.value) {
-    solutionGlobale.value = lastBotResponse.value
+  if (!lastBotResponse.value) { errorMsg.value = "❌ Aucune réponse du chatbot à copier"; return }
+  solutionGlobale.value = lastBotResponse.value.trim()
+  if (solutionGlobale.value.length > 5000) {
+    errorMsg.value = `⚠️ Solution très longue (${solutionGlobale.value.length} caractères)`
+  } else {
+    message.value = "✅ Solution copiée du chatbot"
   }
 }
 
 const scrollChat = async () => {
   await nextTick()
-  if (chatBox.value) {
-    chatBox.value.scrollTop = chatBox.value.scrollHeight
-  }
+  if (chatBox.value) chatBox.value.scrollTop = chatBox.value.scrollHeight
 }
 
 // ====================== PRODUIT ======================
@@ -651,9 +858,7 @@ const validerTestEnCours = () => {
   } else {
     finalStatut.value = nbDefauts === 0 ? "Conforme" : "Non Conforme"
     isFinished.value = true
-    if (finalStatut.value === "Non Conforme") {
-      lancerChatbot()
-    }
+    if (finalStatut.value === "Non Conforme") lancerChatbot()
   }
 }
 
@@ -668,36 +873,73 @@ const extraireDefauts = () => {
   const echTest1 = testResults.value[0]?.echantillons || []
   const echTest2 = testResults.value[1]?.echantillons || []
 
-  const defautsTest1 = echTest1.filter(e => e.valeur === 1)
-  const defautsTest2 = echTest2.filter(e => e.valeur === 1)
-
   const resoudreDefaut = (ech) => {
     if (!ech) return null
     if (ech.defaut === 'Nouveau Défaut') return ech.nouveauDefaut?.trim() || null
     return ech.defaut?.trim() || null
   }
 
-  return {
-    defaut1: resoudreDefaut(defautsTest1[0]),
-    defaut2: resoudreDefaut(defautsTest2[0])
-  }
+  const defaut1 = resoudreDefaut(echTest1.filter(e => e.valeur === 1)[0])
+  const defaut2 = resoudreDefaut(echTest2.filter(e => e.valeur === 1)[0])
+
+  return { defaut1, defaut2 }
 }
 
-// ====================== SUBMIT ======================
-const handleSubmit = async () => {
+// ====================== VALIDATION SOLUTION ======================
+const validerSolution = () => {
   errorMsg.value = ""
   message.value = ""
 
-  if (!form.value.utilisateurId) return (errorMsg.value = "❌ Sélectionnez un Contrôleur")
-  if (!form.value.codeMachine) return (errorMsg.value = "❌ Sélectionnez une Machine")
-  if (!form.value.numOF?.trim()) return (errorMsg.value = "❌ Num OF obligatoire")
-  if (!form.value.codeArticle?.trim()) return (errorMsg.value = "❌ Code Article obligatoire")
-  if (!form.value.quantite || form.value.quantite < 1) return (errorMsg.value = "❌ Quantité > 0")
-  if (!form.value.cadence || form.value.cadence < 1) return (errorMsg.value = "❌ Cadence > 0")
-  if (finalStatut.value === "Non Conforme" && !solutionValidee.value) {
-    errorMsg.value = "❌ Vous devez valider la solution avant d'enregistrer"
-    return
+  if (!solutionGlobale.value?.trim()) { errorMsg.value = "❌ Aucune solution à valider"; return }
+  const solutionLength = solutionGlobale.value.trim().length
+  if (solutionLength > 5000) { errorMsg.value = `⚠️ Solution trop longue (${solutionLength} caractères). Limite : 5000`; return }
+
+  solutionValidee.value = true
+  message.value = `✅ Solution validée (${solutionLength} caractères)`
+}
+
+// ====================== VALIDATION ET ENREGISTREMENT ======================
+const prepareForValidation = async () => {
+  errorMsg.value = ""
+  message.value = ""
+
+  if (!form.value.utilisateurId) { errorMsg.value = "❌ Sélectionnez un Contrôleur"; return }
+  if (!form.value.codeMachine) { errorMsg.value = "❌ Sélectionnez une Machine"; return }
+  if (!form.value.numOF?.trim()) { errorMsg.value = "❌ Num OF obligatoire"; return }
+  if (!form.value.codeArticle?.trim()) { errorMsg.value = "❌ Code Article obligatoire"; return }
+  if (!form.value.quantite || form.value.quantite < 1) { errorMsg.value = "❌ Quantité > 0"; return }
+  if (!form.value.cadence || form.value.cadence < 1) { errorMsg.value = "❌ Cadence > 0"; return }
+
+  if (finalStatut.value === "Non Conforme") {
+    if (!solutionValidee.value) { errorMsg.value = "❌ Vous devez valider la solution avant d'enregistrer"; return }
+    if (!solutionGlobale.value?.trim()) { errorMsg.value = "❌ La solution corrective ne peut pas être vide"; return }
+    if (solutionGlobale.value.trim().length > 5000) { errorMsg.value = "❌ La solution est trop longue (max 5000 caractères)"; return }
   }
+
+  // ✅ Préparer les données du récapitulatif et ouvrir le modal
+  confirmData.value = {
+    utilisateur: getNomUtilisateur(form.value.utilisateurId),
+    machine: form.value.codeMachine,
+    codeArticle: form.value.codeArticle,
+    numOF: form.value.numOF,
+    quantite: form.value.quantite,
+    cadence: form.value.cadence,
+    statut: finalStatut.value,
+    nbEchantillons: tailleEchantillons.value,
+    nbDefautsTest1: testResults.value[0]?.nbDefauts ?? 0,
+    nbDefautsTest2: testResults.value[1]?.nbDefauts ?? 0,
+    solution: solutionGlobale.value
+  }
+  showConfirmModal.value = true
+}
+
+// ✅ Appelé quand l'utilisateur clique "Confirmer" dans le modal
+const confirmerEtEnregistrer = async () => {
+  showConfirmModal.value = false
+  await handleSubmit()
+}
+
+const handleSubmit = async () => {
   loading.value = true
 
   const { defaut1, defaut2 } = extraireDefauts()
@@ -709,50 +951,55 @@ const handleSubmit = async () => {
     utilisateurId: Number(form.value.utilisateurId),
     quantite: Number(form.value.quantite),
     cadence: Number(form.value.cadence),
-    nbEchantillons: tailleEchantillons.value,
-    nbDefautsTest1: testResults.value[0]?.nbDefauts ?? 0,
-    nbDefautsTest2: testResults.value[1]?.nbDefauts ?? 0,
-    solutionGlobale: solutionGlobale.value?.trim() || null,
-    defaut1,
-    defaut2
+    nbEchantillons: Number(tailleEchantillons.value),
+    nbDefautsTest1: Number(testResults.value[0]?.nbDefauts ?? 0),
+    nbDefautsTest2: Number(testResults.value[1]?.nbDefauts ?? 0),
+    solutionGlobale: (solutionGlobale.value?.trim() || "").substring(0, 5000),
+    ...(defaut1 && { defaut1 }),
+    ...(defaut2 && { defaut2 })
   }
 
   try {
+    let res
     if (editingId.value) {
-      const res = await api.put(`/ResultatControle/${editingId.value}`, payload)
-      if (res.data?.success === false) {
-        errorMsg.value = res.data?.message || "Erreur modification"
-        return
-      }
+      res = await api.put(`/ResultatControle/${editingId.value}`, payload)
+      if (res.data?.success === false) { errorMsg.value = res.data?.message || "Erreur lors de la modification"; return }
       message.value = "✅ Modifié avec succès"
     } else {
-      const res = await api.post("/ResultatControle", payload)
-      if (res.data?.success === false) {
-        errorMsg.value = res.data?.message || "Erreur enregistrement"
-        return
-      }
+      res = await api.post("/ResultatControle", payload)
+      if (res.data?.success === false) { errorMsg.value = res.data?.message || "Erreur lors de l'enregistrement"; return }
       message.value = "✅ Contrôle enregistré avec succès"
     }
 
     await loadResultats()
     resetForm()
   } catch (err) {
-    console.error("❌ ERREUR :", err.response?.data)
-    errorMsg.value = err.response?.data?.message || "Erreur lors de l'enregistrement"
+    console.error("❌ ERREUR COMPLÈTE :", err)
+    const errorData = err.response?.data
+    let detailedError = "Erreur lors de l'enregistrement"
+    if (errorData?.errors && typeof errorData.errors === 'object') {
+      detailedError = `Erreurs de validation :\n${Object.entries(errorData.errors).map(([f, m]) => `${f}: ${m}`).join("\n")}`
+    } else if (errorData?.message) {
+      detailedError = errorData.message
+    } else if (err.message) {
+      detailedError = err.message
+    }
+    errorMsg.value = detailedError
   } finally {
     loading.value = false
   }
 }
 
 // ====================== AUTRES ======================
+const annuler = () => {
+  if (confirm("Êtes-vous sûr ? Les données seront perdues.")) resetForm()
+}
+
 const confirmDelete = (id) => {
   if (confirm("Supprimer ce contrôle ?")) {
     api.delete(`/ResultatControle/${id}`)
-      .then(() => {
-        message.value = "✅ Supprimé avec succès"
-        loadResultats()
-      })
-      .catch(() => (errorMsg.value = "Erreur suppression"))
+      .then(() => { message.value = "✅ Supprimé avec succès"; loadResultats() })
+      .catch(() => { errorMsg.value = "Erreur lors de la suppression" })
   }
 }
 
@@ -774,19 +1021,14 @@ const editControle = (res) => {
     { nbDefauts: res.nbDefautsTest2 || 0, echantillons: [] }
   ]
   isFinished.value = true
+  solutionValidee.value = !!res.solutionGlobale
   onCodeArticleChange()
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 const resetForm = () => {
   editingId.value = null
-  form.value = {
-    utilisateurId: null,
-    codeMachine: "",
-    codeArticle: "",
-    numOF: "",
-    quantite: null,
-    cadence: null
-  }
+  form.value = { utilisateurId: null, codeMachine: "", codeArticle: "", numOF: "", quantite: null, cadence: null }
   designation.value = ""
   cadenceBase.value = 0
   isProduitInconnu.value = false
@@ -800,13 +1042,31 @@ const resetForm = () => {
   chatMessages.value = []
   lastBotResponse.value = ""
   isStreaming.value = false
+  solutionValidee.value = false
+  errorMsg.value = ""
+  message.value = ""
 }
 
 // ====================== CHARGEMENT ======================
-const loadUtilisateurs = async () => { utilisateurs.value = (await api.get("/Utilisateur")).data || [] }
-const loadMachines = async () => { machines.value = (await api.get("/Machine")).data || [] }
-const loadDefauts = async () => { defauts.value = (await api.get("/TypeDefaut")).data || [] }
-const loadResultats = async () => { resultats.value = (await api.get("/ResultatControle")).data || [] }
+const loadUtilisateurs = async () => {
+  try { utilisateurs.value = (await api.get("/Utilisateur")).data || [] }
+  catch (err) { console.error("Erreur chargement utilisateurs :", err) }
+}
+
+const loadMachines = async () => {
+  try { machines.value = (await api.get("/Machine")).data || [] }
+  catch (err) { console.error("Erreur chargement machines :", err) }
+}
+
+const loadDefauts = async () => {
+  try { defauts.value = (await api.get("/TypeDefaut")).data || [] }
+  catch (err) { console.error("Erreur chargement défauts :", err) }
+}
+
+const loadResultats = async () => {
+  try { resultats.value = (await api.get("/ResultatControle")).data || [] }
+  catch (err) { console.error("Erreur chargement résultats :", err) }
+}
 
 onMounted(async () => {
   await Promise.all([loadUtilisateurs(), loadMachines(), loadDefauts(), loadResultats()])
